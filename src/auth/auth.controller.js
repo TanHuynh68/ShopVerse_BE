@@ -1,26 +1,23 @@
 const returnResponse = require("../../constants/controller.constant");
-const User = require("../users/users.schema");
-
+const ERROR = require("../../message/err.message");
+const TOAST = require("../../message/toast.message");
+const { hashPass } = require("../../utils/hashPassword.util");
+const { checkEmailExisted, createUser } = require("./auth.services");
 class authController {
   register = async (req, res) => {
     const { name, password, email } = req.body;
     try {
-      const findUser = await User.findOne({ email });
+      const findUser = await checkEmailExisted(email);
       if (findUser) {
-        return res.status(400).json({
-          message: "Email is exist!",
-        });
+        return returnResponse(TOAST.EMAIL_EXISTED, null, res, 400);
       }
-      const data = await User.create({ name, password, email });
+      const hashPassword = hashPass(password);
+      const data = await createUser(name, hashPassword, email);
       if (data) {
-        console.log("data: ", data);
-        returnResponse("Register Successfully!", data, res, 200);
+        return returnResponse(TOAST.REGISTER_SUCCESSFULLY, data, res, 200);
       }
     } catch (error) {
-      console.log("authController: ", error);
-      return res.status(500).json({
-        message: "Internal Server Error",
-      });
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, null, res, 500);
     }
   };
 }
