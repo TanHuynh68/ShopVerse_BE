@@ -11,4 +11,5 @@ const comparePassword = (password) => {
     return result;
   });
 };
+
 module.exports = { hashPass, comparePassword };

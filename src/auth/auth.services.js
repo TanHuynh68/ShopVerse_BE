@@ -1,5 +1,21 @@
+const { transporter } = require("../../config/email.config");
+const returnResponse = require("../../constants/controller.constant");
+const ERROR = require("../../message/err.message");
+const TOAST = require("../../message/toast.message");
+const { sendVerifyCodeByEmail } = require("../email/email.service");
 const User = require("../users/users.schema");
+const nodemailer = require("nodemailer");
 class authService {
+  activeUser = async (_id) => {
+    const data = await User.findOneAndUpdate(_id, {
+      isActive: true,
+    },{ new: true });
+    if (data) {
+      return data;
+    }
+    return null;
+  };
+
   checkEmailExisted = async (email) => {
     const data = await User.findOne({ email });
     if (data) {
@@ -7,12 +23,63 @@ class authService {
     }
     return null;
   };
+
   createUser = async (name, password, email) => {
-    const data = await User.create({name, password, email});
+    const data = await User.create({ name, password, email });
     if (data) {
       return data;
     }
     return null;
+  };
+
+  saveVerifyCode = async (_id, verifyCode) => {
+    const data = await User.findOneAndUpdate(_id, {
+      verifyCode,
+      verifyCodeExpiresAt: new Date(Date.now() + 5 * 60 * 1000),
+    });
+    if (data) {
+      return data;
+    }
+    return null;
+  };
+
+  isVerifyCodeExisted = async (email, verifyCode) => {
+    const data = await User.findOne({ email, verifyCode });
+    if (data) {
+      return data;
+    }
+    return null;
+  };
+
+  // send code service - use in register api
+  sendCode = async (req, res) => {
+    try {
+      const { email } = req.body;
+      const isEmailExisted = await this.checkEmailExisted(email);
+      if (!isEmailExisted) {
+        return returnResponse(TOAST.EMAIL_IS_NOT_EXISTED, null, res, 400);
+      }
+      const verifyCode = await sendVerifyCodeByEmail(email);
+      if (verifyCode) {
+        // save code into db
+        const response = await this.saveVerifyCode(
+          isEmailExisted._id,
+          verifyCode
+        );
+        if (!response) {
+          return returnResponse(
+            "Don't save verify code into db",
+            null,
+            res,
+            500
+          );
+        }
+        return verifyCode;
+      }
+      return null;
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, null, res, 500);
+    }
   };
 }
 
