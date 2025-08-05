@@ -9,6 +9,9 @@ const TOAST = {
   VERIFY_CODE_EXPIRED: "Verify code expired!",
   VERIFY_SUCCESSFULLY: "Verify successfully!",
   USER_ACTIVATED: "User activated",
+  USER_NOT_ACTIVATED: "User not activated",
+  LOGIN_SUCCESSFULLY: "Login Successfully!",
+  IN_CORRECT_PASSWORD: "In correct password!",
 };
 
 module.exports = TOAST;

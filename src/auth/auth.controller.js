@@ -1,7 +1,8 @@
 const returnResponse = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
-const { hashPass } = require("../../utils/hashPassword.util");
+const { hashPass, comparePassword } = require("../../utils/hashPassword.util");
+const { createToken } = require("./auth.middleware");
 const {
   checkEmailExisted,
   createUser,
@@ -51,6 +52,30 @@ class authController {
         }
       }
       return returnResponse(TOAST.IN_CORRECT_VERIFY_CODE, null, res, 400);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
+  login = async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const user = await checkEmailExisted(email);
+      if (!user) {
+        return returnResponse(TOAST.USER_NOT_FOUND, null, res, 404);
+      }
+      if (user && !user.isActive) {
+        return returnResponse(TOAST.USER_NOT_ACTIVATED, null, res, 401);
+      }
+      const isPasswordCorrect = await comparePassword(password, user.password);
+      if (isPasswordCorrect) {
+        const token = createToken(user);
+        const data = {
+          accessToken: token,
+        };
+        return returnResponse(TOAST.LOGIN_SUCCESSFULLY, data, res, 401);
+      }
+      return returnResponse(TOAST.IN_CORRECT_PASSWORD, null, res, 401);
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }

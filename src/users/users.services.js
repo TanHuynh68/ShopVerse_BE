@@ -3,7 +3,9 @@ const User = require("./users.schema");
 
 class usersService {
   getUserService = async () => {
-    const data = await User.find({});
+    const data = await User.find({}).select(
+      "-password -verifyCode -verifyCodeExpiresAt -__v"
+    );
     if (data) {
       return data;
     }
