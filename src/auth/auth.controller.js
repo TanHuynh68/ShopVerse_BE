@@ -64,18 +64,21 @@ class authController {
       if (!user) {
         return returnResponse(TOAST.USER_NOT_FOUND, null, res, 404);
       }
-      if (user && !user.isActive) {
+      if (!user.isActive) {
         return returnResponse(TOAST.USER_NOT_ACTIVATED, null, res, 401);
       }
-      const isPasswordCorrect = await comparePassword(password, user.password);
-      if (isPasswordCorrect) {
-        const token = createToken(user);
-        const data = {
-          accessToken: token,
-        };
-        return returnResponse(TOAST.LOGIN_SUCCESSFULLY, data, res, 401);
+      if (user.isDeleted) {
+        return returnResponse(TOAST.USER_BANNED, null, res, 401);
       }
-      return returnResponse(TOAST.IN_CORRECT_PASSWORD, null, res, 401);
+      const isPasswordCorrect = await comparePassword(password, user.password);
+      if (!isPasswordCorrect) {
+        return returnResponse(TOAST.IN_CORRECT_PASSWORD, null, res, 401);
+      }
+      const token = createToken(user);
+      const data = {
+        accessToken: token,
+      };
+      return returnResponse(TOAST.LOGIN_SUCCESSFULLY, data, res, 200);
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }

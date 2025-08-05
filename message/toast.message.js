@@ -10,8 +10,10 @@ const TOAST = {
   VERIFY_SUCCESSFULLY: "Verify successfully!",
   USER_ACTIVATED: "User activated",
   USER_NOT_ACTIVATED: "User not activated",
+  USER_BANNED: "User banned",
   LOGIN_SUCCESSFULLY: "Login Successfully!",
   IN_CORRECT_PASSWORD: "In correct password!",
+  UPDATE_USER_SUCCESSFULLY: "Update user successfully",
 };
 
 module.exports = TOAST;
