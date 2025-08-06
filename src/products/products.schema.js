@@ -1,0 +1,23 @@
+const { default: mongoose } = require("mongoose");
+
+const { Schema } = mongoose;
+
+const productSchema = new Schema(
+  {
+    name: { type: String, required: true }, // Tên sản phẩm
+    description: { type: String }, // Mô tả sản phẩm
+    price: { type: Number, required: true }, // Giá
+    stock: { type: Number, required: true }, // Số lượng tồn kho
+    category: { type: String, required: true }, // Danh mục
+    images: [{ type: String }], // Danh sách URL ảnh
+    isActive: { type: Boolean, default: true }, // Sản phẩm đang được bán hay không
+    isDeleted: { type: Boolean, default: false }, // Đánh dấu xoá mềm
+    discount: { type: Number, default: 0 }, // Giảm giá %
+    sku: { type: String }, // Mã sản phẩm
+    brand: { type: String }, // Thương hiệu
+  },
+  { timestamps: true }
+);
+
+const Product = mongoose.model("products", productSchema);
+module.exports = Product;

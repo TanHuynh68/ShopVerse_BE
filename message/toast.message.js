@@ -1,5 +1,6 @@
 const TOAST = {
   EMAIL_EXISTED: "Email is exist!",
+  NAME_EXISTED: "Name is exist!",
   EMAIL_IS_NOT_EXISTED: "Email is not exist!",
   REGISTER_SUCCESSFULLY: "Register Successfully!",
   SEND_EMAIL_SUCCESSFULLY: "Send email successfully",
@@ -14,6 +15,9 @@ const TOAST = {
   LOGIN_SUCCESSFULLY: "Login Successfully!",
   IN_CORRECT_PASSWORD: "In correct password!",
   UPDATE_USER_SUCCESSFULLY: "Update user successfully",
+  CREATE_BRAND_SUCCESSFULLY: "Create new brand successfully",
+  BRAND_NOT_FOUND: "Brand not found!",
+  UPDATE_BRAND_SUCCESSFULLY: "Update brand successfully",
 };
 
 module.exports = TOAST;
