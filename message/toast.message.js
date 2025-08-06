@@ -18,6 +18,8 @@ const TOAST = {
   CREATE_BRAND_SUCCESSFULLY: "Create new brand successfully",
   BRAND_NOT_FOUND: "Brand not found!",
   UPDATE_BRAND_SUCCESSFULLY: "Update brand successfully",
+  CATEGORY_NOT_FOUND: "Category not found!",
+  UPDATE_CATEGORY_SUCCESSFULLY: "Update category successfully",
 };
 
 module.exports = TOAST;

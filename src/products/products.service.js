@@ -4,21 +4,25 @@ class productService {
   createProductService = async (
     name,
     description,
-    price,
     stock,
+    sku,
+    price,
     category,
-    images,
-    brand
+    brand,
+    discount,
+    images
   ) => {
     const data = await Product.create({
       name,
       description,
-      price,
       stock,
+      sku,
+      price,
       category,
-      images,
       brand,
-    })
+      discount,
+      images,
+    });
     if (data) {
       return data;
     }

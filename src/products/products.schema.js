@@ -13,10 +13,10 @@ const productSchema = new Schema(
     isActive: { type: Boolean, default: true }, // Sản phẩm đang được bán hay không
     isDeleted: { type: Boolean, default: false }, // Đánh dấu xoá mềm
     discount: { type: Number, default: 0 }, // Giảm giá %
-    sku: { type: String }, // Mã sản phẩm
+    sku: { type: String, unique: true }, // Mã sản phẩm
     brand: { type: String }, // Thương hiệu
   },
-  { timestamps: true }
+  { timestamps: true,}
 );
 
 const Product = mongoose.model("products", productSchema);
