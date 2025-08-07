@@ -20,6 +20,10 @@ const TOAST = {
   UPDATE_BRAND_SUCCESSFULLY: "Update brand successfully",
   CATEGORY_NOT_FOUND: "Category not found!",
   UPDATE_CATEGORY_SUCCESSFULLY: "Update category successfully",
+  CREATE_PRODUCT_SUCCESSFULLY: "Create new product successfully",
+  UPDATE_PRODUCT_SUCCESSFULLY: "Update product successfully",
+  SKU_EXISTED: "Sku is exist!",
+  PRODUCT_NOT_FOUND: "Product not found!"
 };
 
 module.exports = TOAST;

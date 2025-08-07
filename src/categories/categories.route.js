@@ -20,5 +20,6 @@ router
   );
 router.route("/:id").put(categoriesController.restoreOrSoftDelete);
 router.route("/").get(categoriesController.getCategories);
+router.route("/:id").get(categoriesController.getCategory);
 
 module.exports = router;

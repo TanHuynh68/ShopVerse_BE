@@ -8,13 +8,13 @@ const productSchema = new Schema(
     description: { type: String }, // Mô tả sản phẩm
     price: { type: Number, required: true }, // Giá
     stock: { type: Number, required: true }, // Số lượng tồn kho
-    category: { type: String, required: true }, // Danh mục
+    category_id:  { type: Schema.Types.ObjectId, ref: 'categories', required: true }, // Danh mục
     images: [{ type: String }], // Danh sách URL ảnh
     isActive: { type: Boolean, default: true }, // Sản phẩm đang được bán hay không
     isDeleted: { type: Boolean, default: false }, // Đánh dấu xoá mềm
     discount: { type: Number, default: 0 }, // Giảm giá %
     sku: { type: String, unique: true }, // Mã sản phẩm
-    brand: { type: String }, // Thương hiệu
+    brand_id:  { type: Schema.Types.ObjectId, ref: 'brands', required: true }, // Thương hiệu
   },
   { timestamps: true,}
 );

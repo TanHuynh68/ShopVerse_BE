@@ -1,7 +1,14 @@
 const returnResponse = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
-const { checkNameExisted, createCategoryService, getCategoryById, updateCategoryById, getCategoryService, updateCategoryStatus } = require("./categories.serivce");
+const {
+  checkNameExisted,
+  createCategoryService,
+  getCategoryById,
+  updateCategoryById,
+  getCategoryService,
+  updateCategoryStatus,
+} = require("./categories.serivce");
 
 class categoryController {
   getCategories = async (req, res) => {
@@ -9,6 +16,18 @@ class categoryController {
       const data = await getCategoryService();
       if (data) {
         return returnResponse("Get categories successfully", data, res, 200);
+      }
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
+    }
+  };
+
+  getCategory = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const data = await getCategoryById(id);
+      if (data) {
+        return returnResponse("Get category successfully", data, res, 200);
       }
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);

@@ -22,6 +22,18 @@ class brandController {
     }
   };
 
+  getBrand = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const data = await getBrandById(id);
+      if (data) {
+        return returnResponse("Get brand successfully", data, res, 200);
+      }
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
+    }
+  };
+
   createBrand = async (req, res) => {
     try {
       const { name, description } = req.body;

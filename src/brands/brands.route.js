@@ -12,5 +12,6 @@ router
   .put(validateCreateBrand, validate, brandController.updateBrand);
 router.route("/:id").put(brandController.restoreOrSoftDelete);
 router.route("/").get(brandController.getBrands);
+router.route("/:id").get(brandController.getBrand);
 
 module.exports = router;
