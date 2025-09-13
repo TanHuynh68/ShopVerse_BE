@@ -2,6 +2,7 @@
   "name": "shopverse",
   "version": "0.0.0",
   "private": true,
+  "main": "app.js",
   "scripts": {
     "start": "nodemon ./bin/www"
   },

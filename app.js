@@ -20,13 +20,15 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/v1", indexRouter);
 
+app.get("/", (req, res) => {
+  res.json({ message: "Hello from Express on Vercel!" });
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
-app.get('/', (req, res) => {
-  res.json({ message: 'Hello from Express on Vercel!' });
-})
+
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
@@ -37,6 +39,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-console.log("localhost:" + ENV.PORT);
 
 module.exports = app;
