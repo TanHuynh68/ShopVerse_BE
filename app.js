@@ -11,7 +11,7 @@ var port = ENV.PORT;
 var connectDB = require("./config/db.config");
 ;
 connectDB();
-var client = require('./config/redis.config')
+// var client = require('./config/redis.config')
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
