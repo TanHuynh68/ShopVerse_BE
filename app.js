@@ -7,9 +7,9 @@ var app = express();
 var indexRouter = require("./routes/index");
 require("dotenv").config();
 var ENV = require("./config/env.config");
-
+var cors = require('cors')
 var connectDB = require("./config/db.config");
-
+app.use(cors())
 connectDB();
 // var client = require('./config/redis.config')
 app.use(logger("dev"));
