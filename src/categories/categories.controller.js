@@ -39,7 +39,7 @@ class categoryController {
 
   createCategory = async (req, res) => {
     try {
-      const { name, description, brand_id } = req.body;
+      const { name, description, brand_id, img } = req.body;
       const isNameExisted = await checkNameExisted(name);
       if (isNameExisted) {
         return returnResponse(TOAST.NAME_EXISTED, null, res, 409);
@@ -49,7 +49,7 @@ class categoryController {
       if (!isBrandExisted) {
         return returnResponse(TOAST.BRAND_NOT_FOUND, null, res, 404);
       }
-      const response = await createCategoryService(name, description, brand_id);
+      const response = await createCategoryService(name, description, brand_id, img);
       if (!response) {
         return returnResponse(ERROR.INTERNAL_SERVER_ERROR, null, res, 500);
       }

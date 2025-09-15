@@ -1,11 +1,12 @@
 const Category = require("./categories.schema");
 
 class categoryService {
-  createCategoryService = async (name, description, brand_id) => {
+  createCategoryService = async (name, description, brand_id, img) => {
     const data = await Category.create({
       name,
       description,
       brand_id,
+      img
     });
     if (data) {
       const fullData = data.populate("brand_id", "brand_id name description");

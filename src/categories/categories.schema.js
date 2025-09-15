@@ -6,6 +6,7 @@ const categorySchema = new Schema(
     description: { type: String },
     isDeleted: { type: Boolean, default: false },
     brand_id:  { type: Schema.Types.ObjectId, ref: 'brands', required: true }, // Thương hiệu
+    img:{ type: String, required: true },
   },
   { timestamps: true }
 );
