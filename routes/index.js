@@ -12,4 +12,5 @@ router.use("/users", usersRoute);
 router.use("/brands", brandsRoute);
 router.use("/categories", categoriesRoute);
 router.use("/products", productsRoute);
+
 module.exports = router;

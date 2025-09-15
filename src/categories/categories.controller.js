@@ -1,6 +1,8 @@
 const returnResponse = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
+const { getBrandById } = require("../brands/brands.serivce");
+
 const {
   checkNameExisted,
   createCategoryService,
@@ -14,9 +16,7 @@ class categoryController {
   getCategories = async (req, res) => {
     try {
       const data = await getCategoryService();
-      if (data) {
-        return returnResponse("Get categories successfully", data, res, 200);
-      }
+      return returnResponse("Get categories successfully", data, res, 200);
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
     }
@@ -25,10 +25,13 @@ class categoryController {
   getCategory = async (req, res) => {
     const { id } = req.params;
     try {
-      const data = await getCategoryById(id);
-      if (data) {
-        return returnResponse("Get category successfully", data, res, 200);
+      // check cate existed => next
+      const isCateExisted = await getCategoryById(id);
+      if (!isCateExisted) {
+        return returnResponse(TOAST.CATEGORY_NOT_FOUND, null, res, 404);
       }
+      const data = await getCategoryById(id);
+      return returnResponse("Get category successfully", data, res, 200);
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
     }
@@ -36,12 +39,17 @@ class categoryController {
 
   createCategory = async (req, res) => {
     try {
-      const { name, description } = req.body;
+      const { name, description, brand_id } = req.body;
       const isNameExisted = await checkNameExisted(name);
       if (isNameExisted) {
         return returnResponse(TOAST.NAME_EXISTED, null, res, 409);
       }
-      const response = await createCategoryService(name, description);
+      const isBrandExisted = await getBrandById(brand_id);
+      console.log("isBrandExisted: ", isBrandExisted);
+      if (!isBrandExisted) {
+        return returnResponse(TOAST.BRAND_NOT_FOUND, null, res, 404);
+      }
+      const response = await createCategoryService(name, description, brand_id);
       if (!response) {
         return returnResponse(ERROR.INTERNAL_SERVER_ERROR, null, res, 500);
       }
@@ -58,20 +66,31 @@ class categoryController {
 
   updateCategory = async (req, res) => {
     try {
-      const { name, description } = req.body;
+      const { name, description, brand_id } = req.body;
       const { id } = req.params;
-      // check brand existed => next
-      const isBrandExisted = await getCategoryById(id);
-      if (!isBrandExisted) {
+      // check cate existed => next
+      const isCateExisted = await getCategoryById(id);
+      if (!isCateExisted) {
         return returnResponse(TOAST.CATEGORY_NOT_FOUND, null, res, 404);
+      }
+      // check brand existed => next
+      const isBrandExisted = await getBrandById(brand_id);
+      if (!isBrandExisted) {
+        return returnResponse(TOAST.BRAND_NOT_FOUND, null, res, 404);
       }
       // check name existed => 409
       const isNameExisted = await checkNameExisted(name);
-      if (isNameExisted) {
+      // name is existed && name of user entered != name of cate is editing
+      if (isNameExisted && isNameExisted.name != isCateExisted.name) {
         return returnResponse(TOAST.NAME_EXISTED, null, res, 409);
       }
       // update brand
-      const response = await updateCategoryById(id, name, description);
+      const response = await updateCategoryById(
+        id,
+        name,
+        description,
+        brand_id
+      );
       // error when update data in db
       if (!response) {
         return returnResponse(ERROR.INTERNAL_SERVER_ERROR, null, res, 500);
