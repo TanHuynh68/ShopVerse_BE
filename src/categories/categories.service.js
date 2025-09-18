@@ -1,16 +1,14 @@
 const Category = require("./categories.schema");
 
 class categoryService {
-  createCategoryService = async (name, description, brand_id, img) => {
+  createCategoryService = async (name, description, img) => {
     const data = await Category.create({
       name,
       description,
-      brand_id,
-      img
+      img,
     });
     if (data) {
-      const fullData = data.populate("brand_id", "brand_id name description");
-      return fullData;
+      return data;
     }
     return null;
   };
@@ -23,15 +21,14 @@ class categoryService {
     return null;
   };
 
-  updateCategoryById = async (_id, name, description, brand_id) => {
+  updateCategoryById = async (_id, name, description) => {
     const data = await Category.findByIdAndUpdate(
       _id,
-      { name: name, description: description, brand_id: brand_id },
+      { name: name, description: description },
       { new: true }
     ).select("-__v");
     if (data) {
-      const fullData = data.populate("brand_id", "brand_id name description");
-      return fullData;
+      return data;
     }
     return null;
   };
@@ -39,8 +36,7 @@ class categoryService {
   getCategoryById = async (_id) => {
     const data = await Category.findById({ _id }).select("-__v");
     if (data) {
-      const fullData = data.populate("brand_id", "brand_id name description");
-      return fullData;
+      return data;
     }
     return null;
   };
@@ -58,9 +54,7 @@ class categoryService {
   };
 
   getCategoryService = async () => {
-    const data = await Category.find({})
-      .select("-__v")
-      .populate("brand_id", "name description");
+    const data = await Category.find({}).select("-__v");
     return data;
   };
 }

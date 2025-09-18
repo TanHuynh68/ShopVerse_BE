@@ -1,8 +1,8 @@
 const returnResponse = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
-const { getBrandById } = require("../brands/brands.serivce");
-const { getCategoryById } = require("../categories/categories.serivce");
+const { getBrandById } = require("../brands/brands.service");
+const { getCategoryById } = require("../categories/categories.service");
 const {
   createProductService,
   checkSkuExisted,
