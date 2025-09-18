@@ -103,7 +103,7 @@ class productService {
   };
 
   getProductService = async () => {
-    const data = await Product.find({}).select(" -__v");
+    const data = await Product.find({}).select(" -__v").populate("brand_id").populate("category_id");
     if (data) {
       return data;
     }
