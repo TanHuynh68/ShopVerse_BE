@@ -14,7 +14,8 @@ const productSchema = new Schema(
     isDeleted: { type: Boolean, default: false }, // Đánh dấu xoá mềm
     discount: { type: Number, default: 0 }, // Giảm giá %
     sku: { type: String, unique: true }, // Mã sản phẩm
-    brand_id:  { type: Schema.Types.ObjectId, ref: 'brands', required: true }, // Thương hiệu
+    brand_id:  { type: Schema.Types.ObjectId, ref: 'brands', required: true }, // Thương hiệu,
+    shop_id:  { type: Schema.Types.ObjectId, ref: 'user', required: true }, // Shop info,
   },
   { timestamps: true,}
 );

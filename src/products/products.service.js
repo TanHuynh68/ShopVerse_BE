@@ -10,7 +10,8 @@ class productService {
     category_id,
     brand_id,
     discount,
-    images
+    images,
+    shop_id
   ) => {
     const data = await Product.create({
       name,
@@ -22,6 +23,7 @@ class productService {
       brand_id,
       discount,
       images,
+      shop_id,
     });
     if (data) {
       return data;
@@ -39,7 +41,8 @@ class productService {
     category_id,
     brand_id,
     discount,
-    images
+    images,
+    shop_id
   ) => {
     const data = await Product.findByIdAndUpdate(
       _id,
@@ -53,6 +56,7 @@ class productService {
         brand_id,
         discount,
         images,
+        shop_id
       },
       { new: true }
     ).select("-__v");
@@ -63,7 +67,14 @@ class productService {
   };
 
   getProductById = async (_id) => {
-    const response = await Product.findById({ _id });
+    const response = await Product.findById({ _id })
+      .select(" -__v")
+      .populate("brand_id")
+      .populate("category_id")
+      .populate({
+        path: "shop_id",
+        select: "-password -__v -verifyCode -verifyCodeExpiresAt",
+      });
     if (response) {
       return response;
     }
@@ -103,13 +114,19 @@ class productService {
   };
 
   getProductService = async () => {
-    const data = await Product.find({}).select(" -__v").populate("brand_id").populate("category_id");
+    const data = await Product.find({})
+      .select(" -__v")
+      .populate("brand_id")
+      .populate("category_id")
+      .populate({
+        path: "shop_id",
+        select: "-password -__v -verifyCode -verifyCodeExpiresAt",
+      });
     if (data) {
       return data;
     }
     return null;
   };
-  
 }
 
 module.exports = new productService();

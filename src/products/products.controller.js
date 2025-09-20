@@ -3,6 +3,7 @@ const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { getBrandById } = require("../brands/brands.service");
 const { getCategoryById } = require("../categories/categories.service");
+const { getUserById } = require("../users/users.services");
 const {
   createProductService,
   checkSkuExisted,
@@ -16,6 +17,11 @@ const {
 class productController {
   createProduct = async (req, res) => {
     try {
+      const {shop_id} = req.user;
+      const isShopExisted = await getUserById(shop_id);
+      if (!isShopExisted) {
+        return returnResponse(TOAST.USER_NOT_FOUND, null, res, 404);
+      }
       const {
         name,
         description,
@@ -52,7 +58,8 @@ class productController {
         category_id,
         brand_id,
         discount,
-        images
+        images,
+        shop_id
       );
       if (!response) {
         return returnResponse(ERROR.ERROR_SAVE_DATA_INTO_DB, null, res, 500);

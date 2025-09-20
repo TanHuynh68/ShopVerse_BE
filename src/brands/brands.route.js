@@ -1,7 +1,7 @@
 var express = require("express");
 const brandController = require("./brand.controller");
 const { validateCreateBrand } = require("./brands.middleware");
-const validate = require("../../utils/validate.ultil");
+const validate = require("../../utils/validate.util");
 var router = express.Router();
 
 router

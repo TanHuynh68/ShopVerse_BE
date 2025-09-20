@@ -1,15 +1,17 @@
-const ENV = require("../../config/env.config");
+const ENV = require("../config/env.config");
 var jwt = require("jsonwebtoken");
-const returnResponse = require("../../constants/controller.constant");
+const returnResponse = require("../constants/controller.constant");
+const { ROLE } = require("../constants/role");
 
 const createToken = (data) => {
   const token = jwt.sign(
     {
-      data: {email: data.email, role: data.role, name: data.name},
+      data: { email: data.email, role: data.role, name: data.name, account_id: data._id },
     },
     ENV.SECRET,
     { expiresIn: ENV.TOKEN_EXPIRED }
   );
+  console.log("data: ", data);
   return token;
 };
 
@@ -21,14 +23,14 @@ const getTokenFromHeader = (req) => {
 
 const isUser = (req, res, next) => {
   const token = getTokenFromHeader(req);
-  if (token) {
+  if (!token) {
     return returnResponse("Access token is missing", null, res, 401);
   }
   try {
     var decoded = jwt.verify(token, ENV.SECRET);
-    if (decoded.role === "USER") {
+    if (decoded.role === ROLE.USER) {
       req.user = decoded;
-      next();
+      return next();
     }
     return returnResponse("Forbidden", null, res, 403);
   } catch (error) {
@@ -36,4 +38,22 @@ const isUser = (req, res, next) => {
   }
 };
 
-module.exports = { createToken, isUser };
+const isShop = (req, res, next) => {
+  const token = getTokenFromHeader(req);
+  if (!token) {
+    return returnResponse("Access token is missing", null, res, 401);
+  }
+  try {
+    var decoded = jwt.verify(token, ENV.SECRET);
+    console.log("decoded: ", decoded);
+    if (decoded && decoded.data.role === ROLE.SHOP) {
+      req.user = {shop_id: decoded.data.account_id};
+      return next(); 
+    }
+    return returnResponse("Forbidden", null, res, 403);
+  } catch (error) {
+    return returnResponse("Invalid or expired token", error, res, 403);
+  }
+};
+
+module.exports = { createToken, isUser, isShop };

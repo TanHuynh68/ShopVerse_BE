@@ -1,5 +1,5 @@
 var express = require("express");
-const validate = require("../../utils/validate.ultil");
+const validate = require("../../utils/validate.util");
 const { validateCreateUpdateCategory } = require("./categories.middleware");
 const categoriesController = require("./categories.controller");
 var router = express.Router();

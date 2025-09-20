@@ -2,7 +2,8 @@ const returnResponse = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { hashPass, comparePassword } = require("../../utils/hashPassword.util");
-const { createToken } = require("./auth.middleware");
+const { createToken } = require("../../utils/jwt");
+
 const {
   checkEmailExisted,
   createUser,
