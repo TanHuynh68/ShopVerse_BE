@@ -9,6 +9,7 @@ const {
   sendCode,
   activeUser,
 } = require("./auth.services");
+//a
 class authController {
   register = async (req, res) => {
     const { name, password, email } = req.body;
