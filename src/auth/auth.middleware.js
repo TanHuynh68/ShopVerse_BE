@@ -1,39 +1,26 @@
-const ENV = require("../../config/env.config");
-var jwt = require("jsonwebtoken");
-const returnResponse = require("../../constants/controller.constant");
+const { body } = require("express-validator");
 
-const createToken = (data) => {
-  const token = jwt.sign(
-    {
-      data: {email: data.email, role: data.role, name: data.name},
-    },
-    ENV.SECRET,
-    { expiresIn: ENV.TOKEN_EXPIRED }
-  );
-  return token;
-};
+exports.validateCreateUser = [
+  body("name").trim().notEmpty().withMessage("Name is required"),
 
-const getTokenFromHeader = (req) => {
-  const authHeader = req.headers["authorization"];
-  if (!authHeader || !authHeader.startsWith("Bearer ")) return null;
-  return authHeader.split(" ")[1]; // Lấy phần token sau "Bearer "
-};
+  body("password")
+    .trim()
+    .notEmpty()
+    .withMessage("Password is required"),
+    // .isLength({ min: 6 })
+    // .withMessage("Password must be at least 6 characters"),
 
-const isUser = (req, res, next) => {
-  const token = getTokenFromHeader(req);
-  if (token) {
-    return returnResponse("Access token is missing", null, res, 401);
-  }
-  try {
-    var decoded = jwt.verify(token, ENV.SECRET);
-    if (decoded.role === "USER") {
-      req.user = decoded;
-      next();
-    }
-    return returnResponse("Forbidden", null, res, 403);
-  } catch (error) {
-    return returnResponse("Invalid or expired token", error, res, 403);
-  }
-};
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Email is invalid"),
 
-module.exports = { createToken, isUser };
+  body("role")
+    .trim()
+    .notEmpty()
+    .withMessage("Role is required")
+    .isIn(Object.values(ROLE))
+    .withMessage(`Role must be one of: ${Object.values(ROLE).join(", ")}`),
+];

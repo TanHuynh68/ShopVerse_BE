@@ -12,14 +12,14 @@ const {
 //a
 class authController {
   register = async (req, res) => {
-    const { name, password, email } = req.body;
+    const { name, password, email, role } = req.body;
     try {
       const findEmail = await checkEmailExisted(email);
       if (findEmail) {
         return returnResponse(TOAST.EMAIL_EXISTED, null, res, 400);
       }
       const hashPassword = hashPass(password);
-      const data = await createUser(name, hashPassword, email);
+      const data = await createUser(name, hashPassword, email, role);
       if (data) {
         await sendCode(req, res);
         return returnResponse(TOAST.REGISTER_SUCCESSFULLY, data, res, 200);

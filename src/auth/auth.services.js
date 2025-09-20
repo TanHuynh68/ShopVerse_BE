@@ -7,9 +7,13 @@ const User = require("../users/users.schema");
 const nodemailer = require("nodemailer");
 class authService {
   activeUser = async (_id) => {
-    const data = await User.findOneAndUpdate(_id, {
-      isActive: true,
-    },{ new: true });
+    const data = await User.findOneAndUpdate(
+      _id,
+      {
+        isActive: true,
+      },
+      { new: true }
+    );
     if (data) {
       return data;
     }
@@ -24,8 +28,8 @@ class authService {
     return null;
   };
 
-  createUser = async (name, password, email) => {
-    const data = await User.create({ name, password, email });
+  createUser = async (name, password, email, role) => {
+    const data = await User.create({ name, password, email, role });
     if (data) {
       return data;
     }
