@@ -1,4 +1,5 @@
 const { body } = require("express-validator");
+const { ROLE } = require("../../constants/role");
 
 exports.validateCreateUser = [
   body("name").trim().notEmpty().withMessage("Name is required"),
