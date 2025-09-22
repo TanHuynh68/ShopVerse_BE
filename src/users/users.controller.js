@@ -27,6 +27,7 @@ class userController {
       if (data) {
         return returnResponse("Get user successfully", data, res, 200);
       }
+      return returnResponse(TOAST.USER_NOT_FOUND, data, res, 404);
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
     }
@@ -65,7 +66,7 @@ class userController {
   updateUser = async (req, res) => {
     const { id } = req.params;
     const { name } = req.body;
-    console.log('name: ', name)
+    console.log("name: ", name);
     try {
       const data = await getUserById(id);
       if (!data) {

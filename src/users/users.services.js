@@ -2,7 +2,6 @@ const returnResponse = require("../../constants/controller.constant");
 const User = require("./users.schema");
 
 class usersService {
-  
   getUserService = async () => {
     const data = await User.find({}).select(
       "-password -verifyCode -verifyCodeExpiresAt -__v"
@@ -14,19 +13,18 @@ class usersService {
   };
 
   getUserById = async (_id) => {
-    const data = await User.findById({_id}).select(
+    const data = await User.findById({ _id }).select(
       "-password -verifyCode -verifyCodeExpiresAt -__v"
     );
-    if (data) {
-      return data;
-    }
-    return null;
+    return data;
   };
 
   updateStatusUser = async (_id, isDeleted) => {
-    const data = await User.findByIdAndUpdate(_id, {isDeleted: !isDeleted}, {new: true}).select(
-      "-password -verifyCode -verifyCodeExpiresAt -__v"
-    );
+    const data = await User.findByIdAndUpdate(
+      _id,
+      { isDeleted: !isDeleted },
+      { new: true }
+    ).select("-password -verifyCode -verifyCodeExpiresAt -__v");
     if (data) {
       return data;
     }
@@ -34,9 +32,11 @@ class usersService {
   };
 
   updateUserById = async (_id, name) => {
-    const data = await User.findByIdAndUpdate(_id, {name: name}, {new: true}).select(
-      "-password -verifyCode -verifyCodeExpiresAt -__v"
-    );
+    const data = await User.findByIdAndUpdate(
+      _id,
+      { name: name },
+      { new: true }
+    ).select("-password -verifyCode -verifyCodeExpiresAt -__v");
     if (data) {
       return data;
     }

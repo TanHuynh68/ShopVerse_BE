@@ -1,9 +1,10 @@
 const returnResponse = (message, data, res, statusCode) => {
- return res.status(statusCode).json({
+  return res.status(statusCode).json({
     message: message,
     status_code: statusCode,
-    data: data
+    totalItems: data?.length,
+    data: data,
   });
 };
 
-module.exports = returnResponse
+module.exports = returnResponse;

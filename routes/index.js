@@ -6,11 +6,14 @@ var usersRoute = require("../src/users/users.route");
 var brandsRoute = require("../src/brands/brands.route");
 var categoriesRoute = require("../src/categories/categories.route");
 var productsRoute = require("../src/products/product.route");
+var cartsRoute = require("../src/carts/carts.route");
+var paymentsRoute = require("../src/payment/payment.route");
 router.use("/auth", authRoute);
 router.use("/email", emailRoute);
 router.use("/users", usersRoute);
 router.use("/brands", brandsRoute);
 router.use("/categories", categoriesRoute);
 router.use("/products", productsRoute);
-
+router.use("/carts", cartsRoute)
+router.use("/payments", paymentsRoute)
 module.exports = router;

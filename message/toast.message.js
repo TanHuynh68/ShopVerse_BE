@@ -23,7 +23,10 @@ const TOAST = {
   CREATE_PRODUCT_SUCCESSFULLY: "Create new product successfully",
   UPDATE_PRODUCT_SUCCESSFULLY: "Update product successfully",
   SKU_EXISTED: "Sku is exist!",
-  PRODUCT_NOT_FOUND: "Product not found!"
+  PRODUCT_NOT_FOUND: "Product not found!",
+  CREATE_CARTS_SUCCESSFULLY: "Create new product successfully",
+  UPDATE_CARTS_SUCCESSFULLY: "Update product successfully",
+   PAYMENT_VN_PAY_SUCCESSFULLY: "Payment vn pay successfully",
 };
 
 module.exports = TOAST;
