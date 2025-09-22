@@ -1,10 +1,17 @@
-const returnResponse = require("../../constants/controller.constant");
-const { getUserById } = require("../users/users.services");
 const Cart = require("./carts.schema");
 
 class cartsService {
   getCartsService = async (userId) => {
-    const carts = Cart.findOne({ userId: userId });
+    const carts = Cart.find({ userId })
+      .populate("userId", "name email")
+      .populate("items.productId");
+    return carts;
+  };
+
+  getCartService = async (cartId, userId) => {
+    const carts = Cart.findOne({_id: cartId, userId: userId})
+      // .populate("userId", "name email")
+      // .populate("items.productId");
     return carts;
   };
 

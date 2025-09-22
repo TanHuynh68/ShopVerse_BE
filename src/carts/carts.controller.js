@@ -7,6 +7,8 @@ const {
   createCartService,
   getLastCartService,
   addItemToCartService,
+  getCartService,
+  getCartsService,
 } = require("./carts.service");
 
 class cartsController {
@@ -62,6 +64,42 @@ class cartsController {
           200
         );
       }
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
+  getCarts = async (req, res) => {
+    try {
+      const { user_id } = req.user;
+      const isUserExisted = await getUserById(user_id);
+      if (!isUserExisted) {
+        return returnResponse(TOAST.USER_NOT_FOUND, null, res, 404);
+      }
+      const carts = await getCartsService(user_id);
+      return returnResponse(TOAST.GET_CARTS_SUCCESSFULLY, carts, res, 200);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
+  getCart = async (req, res) => {
+    try {
+      const { user_id } = req.user;
+      const { cartId } = req.body;
+      console.log("user_id: ", user_id)
+      console.log("cartId: ", cartId)
+      // check user existed ?
+      const isUserExisted = await getUserById(user_id);
+      if (!isUserExisted) {
+        return returnResponse(TOAST.USER_NOT_FOUND, null, res, 404);
+      }
+      // find cart by id
+      const cart = await getCartService(cartId, user_id);
+      if (!cart) {
+        return returnResponse(TOAST.CART_NOT_FOUND, null, res, 404);
+      }
+      return returnResponse(TOAST.GET_CART_SUCCESSFULLY, cart, res, 200);
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }
