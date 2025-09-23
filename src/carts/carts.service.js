@@ -1,17 +1,38 @@
 const Cart = require("./carts.schema");
 
 class cartsService {
+
+   updateCheckedOutService = async (cartId) => {
+    const cart = Cart.findByIdAndUpdate(cartId, { isCheckedOut: true }, {new: true})
+      // .populate("userId", "name email")
+      // .populate("items.productId");
+    return cart;
+  };
+
   getCartsService = async (userId) => {
-    const carts = Cart.find({ userId })
+    const carts = Cart.find({ userId, isCheckedOut: false })
       .populate("userId", "name email")
       .populate("items.productId");
     return carts;
   };
 
   getCartService = async (cartId, userId) => {
-    const carts = Cart.findOne({_id: cartId, userId: userId})
-      // .populate("userId", "name email")
-      // .populate("items.productId");
+    const cart = Cart.findOne({
+      _id: cartId,
+      userId: userId,
+      isCheckedOut : false,
+    });
+    return cart;
+  };
+
+  getCartService = async (cartId, userId) => {
+    const carts = Cart.findOne({
+      _id: cartId,
+      userId: userId,
+      isCheckedOut: false,
+    });
+    // .populate("userId", "name email")
+    // .populate("items.productId");
     return carts;
   };
 

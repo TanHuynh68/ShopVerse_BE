@@ -1,7 +1,7 @@
 var express = require("express");
-const { paymentVnPay } = require("./payment.controller");
+const { paymentVnPay, vnPayReturn } = require("./payment.controller");
 var router = express.Router();
 
-router.post("/vn-pay", paymentVnPay);
-
+router.post("/vnpay", paymentVnPay);
+router.get("/vnpay-return", vnPayReturn);
 module.exports = router;

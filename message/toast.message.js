@@ -24,11 +24,15 @@ const TOAST = {
   UPDATE_PRODUCT_SUCCESSFULLY: "Update product successfully",
   SKU_EXISTED: "Sku is exist!",
   PRODUCT_NOT_FOUND: "Product not found!",
-  CREATE_CARTS_SUCCESSFULLY: "Create new product successfully",
+  // cart
+  CREATE_CARTS_SUCCESSFULLY: "Create new cart successfully",
   GET_CARTS_SUCCESSFULLY: "Get carts successfully",
   GET_CART_SUCCESSFULLY: "Get cart successfully",
   CART_NOT_FOUND: "Cart not found!",
   UPDATE_CARTS_SUCCESSFULLY: "Update product successfully",
+  // cart
+  CREATE_ORDER_SUCCESSFULLY: "Create new order successfully",
+CREATE_ORDER_FAILED: "Create new order failed",
   PAYMENT_VN_PAY_SUCCESSFULLY: "Payment vn pay successfully",
 };
 

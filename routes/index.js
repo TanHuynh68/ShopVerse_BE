@@ -8,6 +8,7 @@ var categoriesRoute = require("../src/categories/categories.route");
 var productsRoute = require("../src/products/product.route");
 var cartsRoute = require("../src/carts/carts.route");
 var paymentsRoute = require("../src/payment/payment.route");
+var ordersRoute = require("../src/orders/orders.route");
 router.use("/auth", authRoute);
 router.use("/email", emailRoute);
 router.use("/users", usersRoute);
@@ -16,4 +17,5 @@ router.use("/categories", categoriesRoute);
 router.use("/products", productsRoute);
 router.use("/carts", cartsRoute)
 router.use("/payments", paymentsRoute)
+router.use("/orders", ordersRoute)
 module.exports = router;

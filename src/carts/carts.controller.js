@@ -87,8 +87,6 @@ class cartsController {
     try {
       const { user_id } = req.user;
       const { cartId } = req.body;
-      console.log("user_id: ", user_id)
-      console.log("cartId: ", cartId)
       // check user existed ?
       const isUserExisted = await getUserById(user_id);
       if (!isUserExisted) {

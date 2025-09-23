@@ -11,6 +11,22 @@ const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { v4: uuidv4 } = require("uuid");
 class paymentController {
+  vnPayReturn = async (req, res) => {
+    const data = req.query;
+    console.log("data: ", {
+      vnp_Amount: data.vnp_Amount / 100,
+      ...data,
+    });
+    return returnResponse(
+      TOAST.PAYMENT_VN_PAY_SUCCESSFULLY,
+      {
+        vnp_Amount: data.vnp_Amount / 100,
+        ...data,
+      },
+      res,
+      200
+    );
+  };
   paymentVnPay = async (req, res) => {
     // Generate a UUID v4
     const uuid = uuidv4();
@@ -31,7 +47,7 @@ class paymentController {
       const paymentUrl = await initVnPay.buildPaymentUrl({
         vnp_Amount: 100000,
         vnp_IpAddr: ENV.VNP_IP_ADDRESS,
-        vnp_ReturnUrl: ENV.VNP_RETURN_URL,
+        vnp_ReturnUrl: `${ENV.VNP_RETURN_URL}/api/v1/payments/vnpay-return`,
         vnp_TxnRef: uuid, // luôn unique
         vnp_OrderInfo: "Thanh toán đơn hàng test",
         vnp_OrderType: ProductCode.Other,
