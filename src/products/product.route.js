@@ -1,7 +1,7 @@
 var express = require("express");
 const productsController = require("./products.controller");
 const { validateCreateProduct } = require("./products.middleware");
-const validate = require("../../utils/validate.util");
+const { validate } = require("../../utils/validate.util");
 const { isShop } = require("../../utils/jwt");
 var router = express.Router();
 

@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const { getUserById } = require("../src/users/users.services");
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);
@@ -10,4 +11,14 @@ const validate = (req, res, next) => {
   next();
 };
 
-module.exports = validate;
+const isUserExisted = async (req, res, next) => {
+  const { user_id } = req.user;
+  // check user
+  const isUserExisted = await getUserById(user_id);
+  if (!isUserExisted) {
+    return returnResponse(TOAST.USER_NOT_FOUND, null, res, 404);
+  }
+  next();
+};
+
+module.exports = { validate, isUserExisted };

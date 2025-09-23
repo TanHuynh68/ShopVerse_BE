@@ -6,15 +6,45 @@ const {
   updateCheckedOutService,
 } = require("../carts/carts.service");
 const { getUserById } = require("../users/users.services");
-const { createOrderService } = require("./orders.service");
+const {
+  createOrderService,
+  getOrdersService,
+  getOrderDetailService,
+} = require("./orders.service");
 
 class orderController {
+  getMyOrders = async (req, res) => {
+    try {
+      const { user_id } = req.user;
+      const orders = await getOrdersService(user_id);
+      if (orders) {
+        return returnResponse(TOAST.GET_ORDERS_SUCCESSFULLY, orders, res, 200);
+      }
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
+  getMyOrderDetail = async (req, res) => {
+    try {
+      const { user_id } = req.user;
+      const { orderId } = req.params;
+      const order = await getOrderDetailService(orderId, user_id);
+      if (order) {
+        return returnResponse(TOAST.GET_ORDER_SUCCESSFULLY, order, res, 200);
+      }
+      return returnResponse(TOAST.ORDER_NOT_FOUND, null, res, 404);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
   createOrder = async (req, res) => {
     try {
       const { user_id } = req.user;
       const { cartId } = req.body;
-      console.log('user_id: ', user_id)
-      console.log('cartId: ', cartId)
+      console.log("user_id: ", user_id);
+      console.log("cartId: ", cartId);
       // check user
       const isUserExisted = await getUserById(user_id);
       if (!isUserExisted) {

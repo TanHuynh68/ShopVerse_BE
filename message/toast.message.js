@@ -30,9 +30,13 @@ const TOAST = {
   GET_CART_SUCCESSFULLY: "Get cart successfully",
   CART_NOT_FOUND: "Cart not found!",
   UPDATE_CARTS_SUCCESSFULLY: "Update product successfully",
-  // cart
+  // order
   CREATE_ORDER_SUCCESSFULLY: "Create new order successfully",
-CREATE_ORDER_FAILED: "Create new order failed",
+  GET_ORDER_FAILED: "Get order failed",
+  ORDER_NOT_FOUND: "Order not found!",
+  GET_ORDER_SUCCESSFULLY: "Get order successfully",
+  GET_ORDERS_SUCCESSFULLY: "Get orders successfully",
+  CREATE_ORDER_FAILED: "Create new order failed",
   PAYMENT_VN_PAY_SUCCESSFULLY: "Payment vn pay successfully",
 };
 

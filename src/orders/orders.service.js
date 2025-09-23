@@ -10,5 +10,15 @@ class orderService {
     });
     return data;
   };
+
+  getOrdersService = async (userId) => {
+    const data = await Order.find({ userId }).select(" -__v");
+    return data;
+  };
+
+  getOrderDetailService = async (_id, userId) => {
+    const data = await Order.findOne({ _id, userId }).select("-__v");
+    return data;
+  };
 }
 module.exports = new orderService();
