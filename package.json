@@ -23,7 +23,6 @@
     "redis": "^5.8.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "uuid": "^13.0.0",
     "vnpay": "^2.4.2"
   },
   "devDependencies": {
