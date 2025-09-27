@@ -42,14 +42,14 @@ const isUser = (req, res, next) => {
   }
 };
 
-const isShop = (req, res, next) => {
+const isAdmin = (req, res, next) => {
   const token = getTokenFromHeader(req);
   if (!token) {
     return returnResponse("Access token is missing", null, res, 401);
   }
   try {
     var decoded = jwt.verify(token, ENV.SECRET);
-    if (decoded && decoded.data.role === ROLE.SHOP) {
+    if (decoded && decoded.data.role === ROLE.ADMIN) {
       req.user = { shop_id: decoded.data.account_id };
       return next();
     }
@@ -59,4 +59,4 @@ const isShop = (req, res, next) => {
   }
 };
 
-module.exports = { createToken, isUser, isShop };
+module.exports = { createToken, isUser, isAdmin };

@@ -14,7 +14,11 @@ const {
 class brandController {
   getBrands = async (req, res) => {
     try {
-      const {category_id} = req.query;
+      const { category_id } = req.query;
+      const isCateExisted = await getCategoryById(category_id);
+      if (!isCateExisted) {
+        return returnResponse(TOAST.CATEGORY_NOT_FOUND, null, res, 404);
+      }
       const data = await getBrandsService(category_id);
       if (data) {
         return returnResponse("Get brands successfully", data, res, 200);
@@ -47,7 +51,12 @@ class brandController {
       if (isNameExisted) {
         return returnResponse(TOAST.NAME_EXISTED, null, res, 409);
       }
-      const response = await createBrandService(name, description, category_id, img);
+      const response = await createBrandService(
+        name,
+        description,
+        category_id,
+        img
+      );
       if (!response) {
         return returnResponse(ERROR.INTERNAL_SERVER_ERROR, null, res, 500);
       }

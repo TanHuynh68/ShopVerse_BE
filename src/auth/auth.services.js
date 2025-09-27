@@ -1,10 +1,9 @@
-const { transporter } = require("../../config/email.config");
+
 const returnResponse = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { sendVerifyCodeByEmail } = require("../email/email.service");
 const User = require("../users/users.schema");
-const nodemailer = require("nodemailer");
 class authService {
   activeUser = async (_id) => {
     const data = await User.findOneAndUpdate(
