@@ -28,7 +28,7 @@ class paymentController {
     );
   };
   paymentVnPay = async (req, res) => {
-    const {orderId} = req.body; 
+    const { orderId } = req.body;
     try {
       const initVnPay = new VNPay({
         tmnCode: ENV.VNP_TMN_CODE,
