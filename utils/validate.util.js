@@ -1,5 +1,6 @@
 const { validationResult } = require("express-validator");
 const { getUserById } = require("../src/users/users.services");
+const returnResponse = require("../constants/controller.constant");
 
 const validate = (req, res, next) => {
   const errors = validationResult(req);

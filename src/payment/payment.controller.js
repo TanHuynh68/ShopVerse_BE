@@ -27,6 +27,9 @@ class paymentController {
       200
     );
   };
+  paymentResult = ()=>{
+    
+  }
   paymentVnPay = async (req, res) => {
     const { orderId } = req.body;
     try {

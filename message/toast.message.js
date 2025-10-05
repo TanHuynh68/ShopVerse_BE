@@ -38,6 +38,11 @@ const TOAST = {
   GET_ORDERS_SUCCESSFULLY: "Get orders successfully",
   CREATE_ORDER_FAILED: "Create new order failed",
   PAYMENT_VN_PAY_SUCCESSFULLY: "Payment vn pay successfully",
+  // transaction
+  ORDER_HAD_TRANSACTION: "Order paid",
+  CREATE_TRANSACTION_SUCCESSFULLY: "Create new transaction successfully",
+  LINK_IS_NOT_VALID: "Link is not valid!",
+  GET_TRANSACTION_SUCCESSFULLY: "Get transaction successfully",
 };
 
 module.exports = TOAST;

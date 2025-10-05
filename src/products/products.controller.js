@@ -17,7 +17,7 @@ const {
 class productController {
   createProduct = async (req, res) => {
     try {
-      const {shop_id} = req.user;
+      const { shop_id } = req.user;
       const isShopExisted = await getUserById(shop_id);
       if (!isShopExisted) {
         return returnResponse(TOAST.USER_NOT_FOUND, null, res, 404);
@@ -208,18 +208,17 @@ class productController {
   };
 
   getProducts = async (req, res) => {
+    const { category_id } = req.query;
     try {
-      const data = await getProductService();
-      if (data) {
-        return returnResponse("Get products successfully", data, res, 200);
-      }
+      const data = await getProductService(category_id);
+      return returnResponse("Get products successfully", data, res, 200);
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
     }
   };
 
   getProduct = async (req, res) => {
-    const {id} = req.params
+    const { id } = req.params;
     try {
       const data = await getProductById(id);
       if (data) {

@@ -56,7 +56,7 @@ class productService {
         brand_id,
         discount,
         images,
-        shop_id
+        shop_id,
       },
       { new: true }
     ).select("-__v");
@@ -113,19 +113,28 @@ class productService {
     return null;
   };
 
-  getProductService = async () => {
-    const data = await Product.find({})
-      .select(" -__v")
-      .populate("brand_id")
-      .populate("category_id")
-      .populate({
-        path: "shop_id",
-        select: "-password -__v -verifyCode -verifyCodeExpiresAt",
-      });
-    if (data) {
-      return data;
+  getProductService = async (category_id) => {
+    let data;
+    if (category_id) {
+      data = await Product.find({ category_id: category_id })
+        .select(" -__v")
+        .populate("brand_id")
+        .populate("category_id")
+        .populate({
+          path: "shop_id",
+          select: "-password -__v -verifyCode -verifyCodeExpiresAt",
+        });
+    } else {
+      data = await Product.find({})
+        .select(" -__v")
+        .populate("brand_id")
+        .populate("category_id")
+        .populate({
+          path: "shop_id",
+          select: "-password -__v -verifyCode -verifyCodeExpiresAt",
+        });
     }
-    return null;
+    return data;
   };
 }
 

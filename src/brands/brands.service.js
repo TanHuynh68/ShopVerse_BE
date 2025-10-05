@@ -22,10 +22,10 @@ class brandService {
     return null;
   };
 
-  updateBrandById = async (_id, name, description, category_id) => {
+  updateBrandById = async (_id, name, description, category_id, img) => {
     const data = await Brand.findByIdAndUpdate(
       _id,
-      { name: name, description: description, category_id },
+      { name: name, description: description, category_id: category_id, img: img },
       { new: true }
     ).select("-__v");
     if (data) {
