@@ -82,7 +82,7 @@ class authController {
       };
       return returnResponse(TOAST.LOGIN_SUCCESSFULLY, data, res, 200);
     } catch (error) {
-      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error || "Login failed", res, 500);
     }
   };
 }
