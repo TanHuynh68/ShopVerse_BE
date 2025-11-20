@@ -6,7 +6,7 @@ class orderService {
       cartId,
       userId,
       items,
-      subTotal,
+      subTotal
     });
     return data;
   };
@@ -21,7 +21,7 @@ class orderService {
   };
 
   getOrdersService = async (userId) => {
-    const data = await Order.find({ userId }).select(" -__v");
+    const data = await Order.find({ userId }).select(" -__v").sort({createdAt: -1}).populate('items.productId');
     return data;
   };
 

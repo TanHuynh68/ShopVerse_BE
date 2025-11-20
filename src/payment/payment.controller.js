@@ -31,7 +31,7 @@ class paymentController {
     
   }
   paymentVnPay = async (req, res) => {
-    const { orderId } = req.body;
+    const { orderId, returnUrl, amount } = req.body;
     try {
       const initVnPay = new VNPay({
         tmnCode: ENV.VNP_TMN_CODE,
@@ -47,9 +47,9 @@ class paymentController {
       tomorrow.setDate(tomorrow.getDate() + 1);
 
       const paymentUrl = await initVnPay.buildPaymentUrl({
-        vnp_Amount: 100000,
+        vnp_Amount: amount,
         vnp_IpAddr: ENV.VNP_IP_ADDRESS,
-        vnp_ReturnUrl: `${ENV.VNP_RETURN_URL}/api/v1/payments/vnpay-return`,
+        vnp_ReturnUrl: `${returnUrl}/api/v1/payments/vnpay-return`,
         vnp_TxnRef: orderId, // luôn unique
         vnp_OrderInfo: "Thanh toán đơn hàng test",
         vnp_OrderType: ProductCode.Other,
@@ -57,8 +57,6 @@ class paymentController {
         vnp_CreateDate: dateFormat(new Date()),
         vnp_ExpireDate: dateFormat(tomorrow),
       });
-
-      console.log("Payment URL:", paymentUrl);
       return returnResponse(
         TOAST.PAYMENT_VN_PAY_SUCCESSFULLY,
         paymentUrl,

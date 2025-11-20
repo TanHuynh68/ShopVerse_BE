@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 const Cart = require("./carts.schema");
 
 class cartsService {
@@ -25,7 +25,7 @@ class cartsService {
       _id: cartId,
       userId: userId,
       isCheckedOut: false,
-    });
+    }).populate("items.productId")
     return cart;
   };
 
@@ -65,7 +65,6 @@ class cartsService {
     cart.subTotal = cart.items.reduce((sum, i) => sum + i.totalPrice, 0);
     return await cart.save();
   };
-
 
   updateQuantityService = async (_id, userId, itemID, quantity) => {
     const cart = Cart.findOneAndUpdate(
