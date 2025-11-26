@@ -28,9 +28,10 @@ class transactionController {
     try {
       const { user_id } = req.user;
       const { link } = req.body;
+      console.log('link: ', link)
       const parsedUrl = new URL(link);
       const params = Object.fromEntries(parsedUrl.searchParams.entries());
-
+      console.log('params: ', params)
       const {
         vnp_Amount,
         vnp_BankCode,

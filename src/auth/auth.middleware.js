@@ -25,3 +25,20 @@ exports.validateCreateUser = [
     .isIn(Object.values(ROLE))
     .withMessage(`Role must be one of: ${Object.values(ROLE).join(", ")}`),
 ];
+
+exports.validateLogin = [
+  body("password")
+    .trim()
+    .notEmpty()
+    .withMessage("password is required"),
+    // .isLength({ min: 6 })
+    // .withMessage("Password must be at least 6 characters"),
+
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("email is required")
+    .isEmail()
+    .withMessage("email is invalid"),
+];
+

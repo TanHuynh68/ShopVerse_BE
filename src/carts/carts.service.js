@@ -1,11 +1,15 @@
+"use strict";
 const Cart = require("./carts.schema");
 
 class cartsService {
-
-   updateCheckedOutService = async (cartId) => {
-    const cart = Cart.findByIdAndUpdate(cartId, { isCheckedOut: true }, {new: true})
-      // .populate("userId", "name email")
-      // .populate("items.productId");
+  updateCheckedOutService = async (cartId) => {
+    const cart = Cart.findByIdAndUpdate(
+      cartId,
+      { isCheckedOut: true },
+      { new: true }
+    );
+    // .populate("userId", "name email")
+    // .populate("items.productId");
     return cart;
   };
 
@@ -20,8 +24,8 @@ class cartsService {
     const cart = Cart.findOne({
       _id: cartId,
       userId: userId,
-      isCheckedOut : false,
-    });
+      isCheckedOut: false,
+    }).populate("items.productId")
     return cart;
   };
 
@@ -31,8 +35,6 @@ class cartsService {
       userId: userId,
       isCheckedOut: false,
     });
-    // .populate("userId", "name email")
-    // .populate("items.productId");
     return carts;
   };
 
@@ -62,6 +64,19 @@ class cartsService {
     // tính lại subtotal
     cart.subTotal = cart.items.reduce((sum, i) => sum + i.totalPrice, 0);
     return await cart.save();
+  };
+
+  updateQuantityService = async (_id, userId, itemID, quantity) => {
+    const cart = Cart.findOneAndUpdate(
+      { _id, userId: userId, isCheckedOut: false, "items.productId": itemID },
+      {
+        $set: {
+          "items.$.quantity": quantity,
+        },
+      },
+      { new: true }
+    );
+    return cart;
   };
 }
 

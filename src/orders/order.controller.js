@@ -43,8 +43,6 @@ class orderController {
     try {
       const { user_id } = req.user;
       const { cartId } = req.body;
-      console.log("user_id: ", user_id);
-      console.log("cartId: ", cartId);
       // check user
       const isUserExisted = await getUserById(user_id);
       if (!isUserExisted) {
@@ -56,11 +54,16 @@ class orderController {
         return returnResponse(TOAST.CART_NOT_FOUND, null, res, 404);
       }
       // create order
+      console.log('cart: ', cart)
+      let caculateTotalPrice = 0;
+      cart.items.forEach((element) => {
+        caculateTotalPrice += element.price * element.quantity; 
+      });
       const createOrder = await createOrderService(
         cartId,
         user_id,
         cart.items,
-        cart.subTotal
+        caculateTotalPrice
       );
 
       if (createOrder) {

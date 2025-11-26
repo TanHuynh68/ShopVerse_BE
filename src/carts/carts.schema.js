@@ -8,7 +8,7 @@ const cartItemSchema = new Schema(
     name: { type: String, required: true }, // Lưu tên sản phẩm (snapshot)
     price: { type: Number, required: true }, // Lưu giá tại thời điểm thêm
     quantity: { type: Number, required: true, min: 1 }, // Số lượng
-    totalPrice: { type: Number, required: true } // quantity * price
+    totalPrice: { type: Number, required: true }, // quantity * price
   },
   { _id: false } // Không cần _id cho từng item
 );
