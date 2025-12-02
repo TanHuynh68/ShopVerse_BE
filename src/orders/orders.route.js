@@ -7,7 +7,7 @@ const { validateCreateOrder } = require("./orders.middleware");
 var router = express.Router();
 
 router.route("/").post(validateCreateOrder, validate, isUser, createOrder);
-
 router.route("/").get(isUser, isUserExisted, getMyOrders);
 router.route("/:orderId").get(isUser, isUserExisted, getMyOrderDetail);
+
 module.exports = router;

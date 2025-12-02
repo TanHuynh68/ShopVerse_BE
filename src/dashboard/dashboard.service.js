@@ -6,7 +6,7 @@ const Transaction = require("../transaction/transaction.schema");
 const Product = require("../products/products.schema");
 
 class dashboardSerivice {
-  adminGetOdersService = async (startDate, endDate) => {
+  adminGetOrdersService = async (startDate, endDate) => {
     try {
       let query = {};
       if (startDate && endDate) {
