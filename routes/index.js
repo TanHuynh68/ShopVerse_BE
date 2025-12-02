@@ -10,6 +10,8 @@ var cartsRoute = require("../src/carts/carts.route");
 var paymentsRoute = require("../src/payment/payment.route");
 var ordersRoute = require("../src/orders/orders.route");
 var transactionRoute = require("../src/transaction/transaction.route");
+var dashboardRoute = require("../src/dashboard/dashboard.route");
+
 router.use("/auth", authRoute);
 router.use("/email", emailRoute);
 router.use("/users", usersRoute);
@@ -20,4 +22,6 @@ router.use("/carts", cartsRoute)
 router.use("/payments", paymentsRoute)
 router.use("/orders", ordersRoute)
 router.use("/transactions", transactionRoute);
+router.use("/dashboards", dashboardRoute);
+
 module.exports = router;

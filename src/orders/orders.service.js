@@ -34,6 +34,6 @@ class orderService {
     const data = await Order.findOne({ _id: _id }).select("-__v");
     return data;
   };
-
+  
 }
 module.exports = new orderService();

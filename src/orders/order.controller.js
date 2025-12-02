@@ -13,6 +13,7 @@ const {
 } = require("./orders.service");
 
 class orderController {
+  // customer get all their orders
   getMyOrders = async (req, res) => {
     try {
       const { user_id } = req.user;
@@ -25,6 +26,7 @@ class orderController {
     }
   };
 
+  // customer get their order detail
   getMyOrderDetail = async (req, res) => {
     try {
       const { user_id } = req.user;
@@ -38,7 +40,7 @@ class orderController {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }
   };
-
+  // customer create order
   createOrder = async (req, res) => {
     try {
       const { user_id } = req.user;
@@ -54,10 +56,10 @@ class orderController {
         return returnResponse(TOAST.CART_NOT_FOUND, null, res, 404);
       }
       // create order
-      console.log('cart: ', cart)
+      console.log("cart: ", cart);
       let caculateTotalPrice = 0;
       cart.items.forEach((element) => {
-        caculateTotalPrice += element.price * element.quantity; 
+        caculateTotalPrice += element.price * element.quantity;
       });
       const createOrder = await createOrderService(
         cartId,
