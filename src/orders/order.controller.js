@@ -5,6 +5,7 @@ const {
   getCartService,
   updateCheckedOutService,
 } = require("../carts/carts.service");
+const { updateStockAndSold } = require("../products/products.service");
 const { getUserById } = require("../users/users.services");
 const {
   createOrderService,
@@ -67,9 +68,9 @@ class orderController {
         cart.items,
         caculateTotalPrice
       );
-
       if (createOrder) {
         await updateCheckedOutService(cartId);
+
         return returnResponse(
           TOAST.CREATE_ORDER_SUCCESSFULLY,
           createOrder,

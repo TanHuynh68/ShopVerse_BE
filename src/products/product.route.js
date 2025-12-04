@@ -16,6 +16,7 @@ router
 router.route("/:id").put(productsController.restoreOrSoftDelete);
 router.route("/toggle-active/:id").put(productsController.toggleActive);
 router.route("/").get(productsController.getProducts);
+router.route("/best-selling").get(productsController.getBestSellingProduct);
 router.route("/:id").get(productsController.getProduct);
 
 module.exports = router;

@@ -31,7 +31,7 @@ class orderService {
   };
 
   getOrderById = async (_id) => {
-    const data = await Order.findOne({ _id: _id }).select("-__v");
+    const data = await Order.findOne({ _id: _id }).select("-__v").populate("cartId");
     return data;
   };
   

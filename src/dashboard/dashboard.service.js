@@ -88,13 +88,9 @@ class dashboardSerivice {
         query = { createdAt: { $gte: startDate, $lte: endDate } };
       }
       const data = await Product.find(query)
-        .select(" -__v")
+        .select(" -__v -shop_id")
         .populate("brand_id")
         .populate("category_id")
-        .populate({
-          path: "shop_id",
-          select: "-password -__v -verifyCode -verifyCodeExpiresAt",
-        });
       return data;
     } catch (error) {
       return error || "Admin get all products service failed!";

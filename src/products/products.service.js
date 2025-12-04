@@ -81,6 +81,17 @@ class productService {
     return null;
   };
 
+  getBestSellingProduct = async () => {
+    const response = await Product.find({isDeleted: false, isActive: true}).sort({sold: -1})
+      .select(" -__v -shop_id")
+      .populate("brand_id")
+      .populate("category_id")
+    if (response) {
+      return response;
+    }
+    return null;
+  };
+
   checkSkuExisted = async (sku) => {
     const response = await Product.findOne({ sku });
     if (response) {
@@ -116,7 +127,7 @@ class productService {
   getProductService = async (category_id) => {
     let data;
     if (category_id) {
-      data = await Product.find({ category_id: category_id })
+      data = await Product.find({ category_id: category_id, isDeleted: false, isActive: true })
         .select(" -__v")
         .populate("brand_id")
         .populate("category_id")
@@ -125,7 +136,7 @@ class productService {
           select: "-password -__v -verifyCode -verifyCodeExpiresAt",
         });
     } else {
-      data = await Product.find({})
+      data = await Product.find({ isDeleted: false, isActive: true})
         .select(" -__v")
         .populate("brand_id")
         .populate("category_id")
@@ -135,6 +146,24 @@ class productService {
         });
     }
     return data;
+  };
+
+  updateStockAndSold = async (items) => {
+    try {
+      const bulkOps = items.map((item) => {
+        return {
+          updateOne: {
+            filter: { _id: item.productId },
+            update: { $inc: { sold: parseInt(item.quantity), stock: parseInt(-item.quantity) } },
+          },
+        };
+      });
+
+      const result = await Product.bulkWrite(bulkOps);
+      return result;
+    } catch (error) {
+      throw error;
+    }
   };
 }
 

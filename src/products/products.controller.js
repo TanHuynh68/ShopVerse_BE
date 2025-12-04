@@ -12,6 +12,7 @@ const {
   updateStatusProduct,
   updateActiveProduct,
   getProductService,
+  getBestSellingProduct,
 } = require("./products.service");
 
 class productController {
@@ -212,6 +213,15 @@ class productController {
     try {
       const data = await getProductService(category_id);
       return returnResponse("Get products successfully", data, res, 200);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
+    }
+  };
+
+  getBestSellingProduct = async (req, res) => {
+    try {
+      const data = await getBestSellingProduct();
+      return returnResponse("Get best selling products successfully", data, res, 200);
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
     }
