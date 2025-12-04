@@ -8,9 +8,10 @@ const {
 } = require("./transaction.controller");
 
 var router = express.Router();
+
 router
   .route("/")
   .post(validateCreateTransaction, validate, isUser, createTransactionHistory);
-
 router.route("/").get(isUser, getMyTransaction);
+
 module.exports = router;

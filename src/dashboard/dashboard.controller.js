@@ -4,15 +4,107 @@ const TOAST = require("../../message/toast.message");
 const { generateDates } = require("../../utils/date.util");
 
 const {
-  adminGetOdersService,
   adminGetBrandsService,
   adminGetCategoriesService,
   adminGetProductsService,
   adminGetTransactionsService,
   adminGetUsersService,
+  adminGetOrdersService,
 } = require("./dashboard.service");
 
 class dashboardController {
+  getOrders = async (req, res) => {
+    try {
+      const { startDate, endDate } = req.body;
+      const orders = await adminGetOrdersService(startDate, endDate);
+      if (orders instanceof Error || typeof orders === "string") {
+        return returnResponse(ERROR.INTERNAL_SERVER_ERROR, orders, res, 500);
+      }
+      return returnResponse(TOAST.GET_ORDERS_SUCCESSFULLY, orders, res, 200);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
+  getTransactions = async (req, res) => {
+    try {
+      const { startDate, endDate } = req.body;
+      const transactions = await adminGetTransactionsService(
+        startDate,
+        endDate
+      );
+      if (transactions instanceof Error || typeof transactions === "string") {
+        return returnResponse(
+          ERROR.INTERNAL_SERVER_ERROR,
+          transactions,
+          res,
+          500
+        );
+      }
+      return returnResponse(
+        TOAST.GET_TRANSACTION_SUCCESSFULLY,
+        transactions,
+        res,
+        200
+      );
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
+  getProducts = async (req, res) => {
+    try {
+      const { startDate, endDate } = req.body;
+      const products = await adminGetProductsService(startDate, endDate);
+      if (products instanceof Error || typeof products === "string") {
+        return returnResponse(ERROR.INTERNAL_SERVER_ERROR, products, res, 500);
+      }
+      return returnResponse('Get categories successfully!', products, res, 200);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
+
+  getCategories = async (req, res) => {
+    try {
+      const { startDate, endDate } = req.body;
+      const cates = await adminGetCategoriesService(startDate, endDate);
+      if (cates instanceof Error || typeof cates === "string") {
+        return returnResponse(ERROR.INTERNAL_SERVER_ERROR, cates, res, 500);
+      }
+      return returnResponse('Get categories successfully!', cates, res, 200);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
+  getBrands= async (req, res) => {
+    try {
+      const { startDate, endDate } = req.body;
+      const brands = await adminGetBrandsService(startDate, endDate);
+      if (brands instanceof Error || typeof brands === "string") {
+        return returnResponse(ERROR.INTERNAL_SERVER_ERROR, brands, res, 500);
+      }
+      return returnResponse('Get brands successfully!', brands, res, 200);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
+  getBrands= async (req, res) => {
+    try {
+      const { startDate, endDate } = req.body;
+      const brands = await adminGetBrandsService(startDate, endDate);
+      if (brands instanceof Error || typeof brands === "string") {
+        return returnResponse(ERROR.INTERNAL_SERVER_ERROR, brands, res, 500);
+      }
+      return returnResponse('Get brands successfully!', brands, res, 200);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
   getDashboard = async (req, res) => {
     try {
       const { startDate, endDate } = req.body;
@@ -21,8 +113,9 @@ class dashboardController {
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
       const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
+      console.log(startDate, endDate);
       // Call tất cả service
-      const orders = await adminGetOdersService(startDate, endDate);
+      const orders = await adminGetOrdersService(startDate, endDate);
       if (orders instanceof Error || typeof orders === "string") {
         return returnResponse(ERROR.INTERNAL_SERVER_ERROR, orders, res, 500);
       }
@@ -72,7 +165,6 @@ class dashboardController {
         orderCountMap[date] = (orderCountMap[date] || 0) + 1;
       });
 
-      console.log("users: ", users);
       let usersAvtive = users
         .filter((o) => o.isActive === true && o.role === "USER")
         .reduce((sum) => sum + 1, 0);
