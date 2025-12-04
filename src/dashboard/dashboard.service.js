@@ -56,7 +56,7 @@ class dashboardSerivice {
       if (startDate && endDate) {
         query = { createAt: { $gte: startDate, $lte: endDate } };
       }
-      const data = await Category.find(query).select("-__v");;
+      const data = await Category.find(query).select("-__v");
       return data;
     } catch (error) {
       return error || "Admin get all categories service failed!";
@@ -69,7 +69,12 @@ class dashboardSerivice {
       if (startDate && endDate) {
         query = { createAt: { $gte: startDate, $lte: endDate } };
       }
-      const data = Transaction.find(query).populate('orderId', "-__v").select("-__v")
+      const data = Transaction.find(query)
+        .populate(
+          "orderId userId",
+          "-__v -password -isActive -verifyCode -verifyCodeExpiresAt -createdAt -updatedAt -isDeleted"
+        )
+        .select("-__v");
       return data;
     } catch (error) {
       return error || "Admin get all transactions service failed!";
