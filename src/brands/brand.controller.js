@@ -2,36 +2,37 @@ const returnResponse = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { getCategoryById } = require("../categories/categories.service");
+const { getProducts } = require("../products/products.service");
+const Brand = require("./brands.schema");
 const {
   createBrandService,
   checkNameExisted,
   updateBrandById,
   getBrandById,
   updateBrandStatus,
-  getBrandsService,
 } = require("./brands.service");
 
 class brandController {
-  
   getBrands = async (req, res) => {
     try {
       const { category_id } = req.query;
       // get brand by cate id
-      if (category_id) {
-        const isCateExisted = await getCategoryById(category_id);
-        if (!isCateExisted) {
-          return returnResponse(TOAST.CATEGORY_NOT_FOUND, null, res, 404);
-        }
-        const data = await getBrandsService(category_id);
-        if (data) {
-          return returnResponse("Get brands successfully", data, res, 200);
-        }
+      const isCateExisted = await getCategoryById(category_id);
+      if (!isCateExisted) {
+        return returnResponse(TOAST.CATEGORY_NOT_FOUND, null, res, 404);
       }
-      // get all brand
-      const data = await getBrandsService();
-      if (data) {
-        return returnResponse("Get brands successfully", data, res, 200);
+      // get products have category that system finding
+      const products = await getProducts(category_id);
+      if (!products) {
+        return returnResponse(TOAST.PRODUCT_NOT_FOUND, null, res, 404);
       }
+      // filter brand_id from products have category that system finding
+      const brandIds = [...new Set(products.map((p) => p.brand_id))];
+      // get brands
+      const brands = await Brand.find({
+        _id: { $in: brandIds },
+      });
+      return returnResponse("Get brands successfully", brands, res, 200);
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
     }
@@ -51,21 +52,12 @@ class brandController {
 
   createBrand = async (req, res) => {
     try {
-      const { name, description, category_id, img } = req.body;
-      const isCateExisted = await getCategoryById(category_id);
-      if (!isCateExisted) {
-        return returnResponse(TOAST.CATEGORY_NOT_FOUND, null, res, 404);
-      }
+      const { name, description, img } = req.body;
       const isNameExisted = await checkNameExisted(name);
       if (isNameExisted) {
         return returnResponse(TOAST.NAME_EXISTED, null, res, 409);
       }
-      const response = await createBrandService(
-        name,
-        description,
-        category_id,
-        img
-      );
+      const response = await createBrandService(name, description, img);
       if (!response) {
         return returnResponse(ERROR.INTERNAL_SERVER_ERROR, null, res, 500);
       }

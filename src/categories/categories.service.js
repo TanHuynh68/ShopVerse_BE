@@ -34,7 +34,7 @@ class categoryService {
   };
 
   getCategoryById = async (_id) => {
-    const data = await Category.findById({ _id }).select("-__v");
+    const data = await Category.findById(_id, {isDeleted: false}).select("-__v");
     if (data) {
       return data;
     }
