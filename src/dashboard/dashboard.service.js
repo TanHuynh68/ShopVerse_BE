@@ -91,10 +91,6 @@ class dashboardSerivice {
         .select(" -__v")
         .populate("brand_id")
         .populate("category_id")
-        .populate({
-          path: "shop_id",
-          select: "-password -__v -verifyCode -verifyCodeExpiresAt",
-        });
       return data;
     } catch (error) {
       return error || "Admin get all products service failed!";
