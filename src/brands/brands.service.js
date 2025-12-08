@@ -1,11 +1,10 @@
 const Brand = require("./brands.schema");
 
 class brandService {
-  createBrandService = async (name, description, category_id, img) => {
+  createBrandService = async (name, description, img) => {
     const data = await Brand.create({
       name,
       description,
-      category_id,
       img
     });
     if (data) {

@@ -10,7 +10,7 @@ class dashboardSerivice {
     try {
       let query = {};
       if (startDate && endDate) {
-        query = { createAt: { $gte: startDate, $lte: endDate } };
+        query = { createdAt: { $gte: startDate, $lte: endDate } };
       }
       const data = await Order.find(query)
         .select(" -__v")
@@ -26,7 +26,7 @@ class dashboardSerivice {
     try {
       let query = {};
       if (startDate && endDate) {
-        query = { createAt: { $gte: startDate, $lte: endDate } };
+        query = { createdAt: { $gte: startDate, $lte: endDate } };
       }
       const data = await User.find(query)
         .sort({ createdAt: -1 })
@@ -41,7 +41,7 @@ class dashboardSerivice {
     try {
       let query = {};
       if (startDate && endDate) {
-        query = { createAt: { $gte: startDate, $lte: endDate } };
+        query = { createdAt: { $gte: startDate, $lte: endDate } };
       }
       const data = await Brand.find(query).select("-__v");
       return data;
@@ -54,7 +54,7 @@ class dashboardSerivice {
     try {
       let query = {};
       if (startDate && endDate) {
-        query = { createAt: { $gte: startDate, $lte: endDate } };
+        query = { createdAt: { $gte: startDate, $lte: endDate } };
       }
       const data = await Category.find(query).select("-__v");
       return data;
@@ -67,7 +67,7 @@ class dashboardSerivice {
     try {
       let query = {};
       if (startDate && endDate) {
-        query = { createAt: { $gte: startDate, $lte: endDate } };
+        query = { createdAt: { $gte: startDate, $lte: endDate } };
       }
       const data = Transaction.find(query)
         .populate(
@@ -85,10 +85,10 @@ class dashboardSerivice {
     try {
       let query = {};
       if (startDate && endDate) {
-        query = { createAt: { $gte: startDate, $lte: endDate } };
+        query = { createdAt: { $gte: startDate, $lte: endDate } };
       }
       const data = await Product.find(query)
-        .select(" -__v")
+        .select(" -__v -shop_id")
         .populate("brand_id")
         .populate("category_id")
       return data;

@@ -108,6 +108,11 @@ class dashboardController {
   getDashboard = async (req, res) => {
     try {
       const { startDate, endDate } = req.body;
+
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
       console.log(startDate, endDate);
       // Call tất cả service
       const orders = await adminGetOrdersService(startDate, endDate);
@@ -160,6 +165,17 @@ class dashboardController {
         orderCountMap[date] = (orderCountMap[date] || 0) + 1;
       });
 
+      let usersAvtive = users
+        .filter((o) => o.isActive === true && o.role === "USER")
+        .reduce((sum) => sum + 1, 0);
+
+      let newAccounts = users.filter(
+        (u) =>
+          u.role === "USER" &&
+          new Date(u.createdAt) >= startOfMonth &&
+          new Date(u.createdAt) <= endOfMonth
+      ).length;
+
       // tạo danh sách ngày đầy đủ
       const allDates = generateDates(startDate, endDate);
 
@@ -187,6 +203,8 @@ class dashboardController {
         numberOfCategories: cates.length,
         numberOfProducts: products.length,
         revenue: calculateRevenue,
+        userActive: usersAvtive,
+        newAccounts: newAccounts,
         chartRevenue: result,
       };
 

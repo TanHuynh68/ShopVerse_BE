@@ -2,6 +2,7 @@ const returnResponse = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { getOrderById, updateStatusOrder } = require("../orders/orders.service");
+const { updateStockAndSold } = require("../products/products.service");
 const { getUserById } = require("../users/users.services");
 const {
   getTransactionByOrderId,
@@ -28,10 +29,10 @@ class transactionController {
     try {
       const { user_id } = req.user;
       const { link } = req.body;
-      console.log('link: ', link)
+      console.log("link: ", link);
       const parsedUrl = new URL(link);
       const params = Object.fromEntries(parsedUrl.searchParams.entries());
-      console.log('params: ', params)
+      console.log("params: ", params);
       const {
         vnp_Amount,
         vnp_BankCode,
@@ -60,6 +61,7 @@ class transactionController {
         return returnResponse(TOAST.LINK_IS_NOT_VALID, null, res, 400);
       }
       const isOrderExisted = await getOrderById(vnp_TxnRef);
+      console.log('isOrderExisted: ', isOrderExisted)
       if (!isOrderExisted) {
         return returnResponse(TOAST.ORDER_NOT_FOUND, null, res, 404);
       }
@@ -86,7 +88,11 @@ class transactionController {
       if (newTransaction) {
         //success
         if (vnp_ResponseCode === "00") {
+          // update status order
           await updateStatusOrder(vnp_TxnRef, "PAID");
+          // update stock and sold of products of order
+         const response = await updateStockAndSold(isOrderExisted.cartId.items);
+         console.log('response: ', response)
         } // customer canceled
         else if (vnp_ResponseCode === "24") {
           await updateStatusOrder(vnp_TxnRef, "CANCELED");
@@ -94,6 +100,7 @@ class transactionController {
         else {
           await updateStatusOrder(vnp_TxnRef, "FAILED");
         }
+
         return returnResponse(
           TOAST.CREATE_TRANSACTION_SUCCESSFULLY,
           newTransaction,

@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, query } = require("express-validator");
 
 exports.validateCreateProduct = [
   body("name").trim().notEmpty().withMessage("Product name is required"),
@@ -29,4 +29,13 @@ exports.validateCreateProduct = [
     .withMessage("At least one image is required"),
 
   body("images.*").isURL().withMessage("Each image must be a valid URL"),
+];
+
+exports.validateQueryGetProducts = [
+  query("category_id")
+    .trim()
+    .notEmpty()
+    .withMessage("category_id is required on query"),
+
+  query("sort").trim().notEmpty().withMessage("sort is required on query"),
 ];

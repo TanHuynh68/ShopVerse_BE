@@ -81,6 +81,26 @@ class productService {
     return null;
   };
 
+  getProducts = async (category_id) => {
+    const response = await Product.find({ category_id }).select("brand_id");
+    if (response) {
+      return response;
+    }
+    return null;
+  };
+
+  getBestSellingProduct = async () => {
+    const response = await Product.find({ isDeleted: false, isActive: true })
+      .sort({ sold: -1 })
+      .select(" -__v -shop_id")
+      .populate("brand_id")
+      .populate("category_id");
+    if (response) {
+      return response;
+    }
+    return null;
+  };
+
   checkSkuExisted = async (sku) => {
     const response = await Product.findOne({ sku });
     if (response) {
@@ -113,28 +133,68 @@ class productService {
     return null;
   };
 
-  getProductService = async (category_id) => {
-    let data;
-    if (category_id) {
-      data = await Product.find({ category_id: category_id })
-        .select(" -__v")
-        .populate("brand_id")
-        .populate("category_id")
-        .populate({
-          path: "shop_id",
-          select: "-password -__v -verifyCode -verifyCodeExpiresAt",
-        });
-    } else {
-      data = await Product.find({})
-        .select(" -__v")
-        .populate("brand_id")
-        .populate("category_id")
-        .populate({
-          path: "shop_id",
-          select: "-password -__v -verifyCode -verifyCodeExpiresAt",
-        });
+  sortProduct = (sort) => {
+    switch (sort) {
+      case "popular":
+        return { sold: -1 };
+      case "newest":
+        return { createdAt: -1 };
+      case "oldest":
+        return { createdAt: 1 };
+      case "highest":
+        return { price: -1 };
+      case "lowest":
+        return { price: 1 };
+      default:
+        return {};
     }
-    return data;
+  };
+
+  getProductsQueryService = async (category_id, sort) => {
+    try {
+      let sortQuery;
+      sortQuery = this.sortProduct(sort);
+      console.log("sortQuery: ", sortQuery);
+      const query = {
+        isDeleted: false,
+        isActive: true,
+        category_id: category_id,
+      };
+      const data = await Product.find(query)
+        .sort(sortQuery)
+        .populate("brand_id")
+        .populate("category_id")
+        .populate({
+          path: "shop_id",
+          select: "-password -__v -verifyCode -verifyCodeExpiresAt",
+        });
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  updateStockAndSold = async (items) => {
+    try {
+      const bulkOps = items.map((item) => {
+        return {
+          updateOne: {
+            filter: { _id: item.productId },
+            update: {
+              $inc: {
+                sold: parseInt(item.quantity),
+                stock: parseInt(-item.quantity),
+              },
+            },
+          },
+        };
+      });
+
+      const result = await Product.bulkWrite(bulkOps);
+      return result;
+    } catch (error) {
+      throw error;
+    }
   };
 }
 
