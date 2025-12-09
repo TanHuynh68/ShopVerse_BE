@@ -9,6 +9,9 @@ const ENV = {
   VNP_HASH_SECRET: process.env.VNP_HASH_SECRET,
   VNP_RETURN_URL: process.env.VNP_RETURN_URL,
   VNP_IP_ADDRESS: process.env.VNP_IP_ADDRESS,
+  CLOUDINARY_NAME: process.env.CLOUDINARY_NAME,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET
 };
 
 module.exports = ENV;

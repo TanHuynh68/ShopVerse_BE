@@ -4,7 +4,7 @@ const returnResponse = (message, data, res, statusCode) => {
     status_code: statusCode,
     totalItems: data?.length,
     ...(statusCode != 200 && statusCode != 201
-      ? { err: data }
+      ? { error: data }
       : { data: data }),
   });
 };

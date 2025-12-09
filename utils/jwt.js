@@ -49,10 +49,12 @@ const isAdmin = (req, res, next) => {
   }
   try {
     var decoded = jwt.verify(token, ENV.SECRET);
+    // if current user is admin => next
     if (decoded && decoded.data.role === ROLE.ADMIN) {
       req.user = { shop_id: decoded.data.account_id };
       return next();
     }
+    // if current user is not admin
     return returnResponse("Forbidden", null, res, 403);
   } catch (error) {
     return returnResponse("Invalid or expired token", error, res, 403);

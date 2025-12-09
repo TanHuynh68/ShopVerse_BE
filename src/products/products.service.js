@@ -94,7 +94,8 @@ class productService {
       .sort({ sold: -1 })
       .select(" -__v -shop_id")
       .populate("brand_id")
-      .populate("category_id");
+      .populate("category_id")
+      .limit(10)
     if (response) {
       return response;
     }
@@ -167,7 +168,7 @@ class productService {
         .populate({
           path: "shop_id",
           select: "-password -__v -verifyCode -verifyCodeExpiresAt",
-        });
+        })
       return data;
     } catch (error) {
       return error;

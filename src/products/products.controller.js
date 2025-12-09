@@ -1,6 +1,7 @@
 const returnResponse = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
+const { uploadToCloudinary } = require("../../utils/upload.utils");
 const { getBrandById } = require("../brands/brands.service");
 const { getCategoryById } = require("../categories/categories.service");
 const { getUserById } = require("../users/users.services");
@@ -19,10 +20,12 @@ class productController {
   createProduct = async (req, res) => {
     try {
       const { shop_id } = req.user;
+
       const isShopExisted = await getUserById(shop_id);
       if (!isShopExisted) {
         return returnResponse(TOAST.USER_NOT_FOUND, null, res, 404);
       }
+
       const {
         name,
         description,
@@ -32,9 +35,8 @@ class productController {
         category_id,
         brand_id,
         discount,
-        images,
       } = req.body;
-      // is brand existed
+
       const isBrandExisted = await getBrandById(brand_id);
       if (!isBrandExisted) {
         return returnResponse(TOAST.BRAND_NOT_FOUND, null, res, 404);
@@ -49,7 +51,29 @@ class productController {
       if (isSkuExisted) {
         return returnResponse(TOAST.SKU_EXISTED, null, res, 400);
       }
-      console.log("isCategoryExisted: ", isCategoryExisted);
+
+      let imageUrls = [];
+       const files = Array.isArray(req.files) ? req.files : [];
+      if (files.length > 0) {
+        // optional: validate mimetype/size
+        for (const f of files) {
+          if (!/^image\/(png|jpe?g|webp)$/.test(f.mimetype)) {
+            return returnResponse("Only png/jpg/webp allowed", null, res, 400);
+          }
+          // optional max size (e.g., 5MB)
+          if (f.size > 5 * 1024 * 1024) {
+            return returnResponse("Each file must be <= 5MB", null, res, 400);
+          }
+        }
+
+        // upload parallel
+        const uploadResults = await Promise.all(
+          files.map((file) => uploadToCloudinary(file.buffer, "products"))
+        );
+
+        imageUrls = uploadResults.map((r) => r.secure_url);
+      }
+      console.log('imageUrls: ', imageUrls)
       const response = await createProductService(
         name,
         description,
@@ -59,9 +83,10 @@ class productController {
         category_id,
         brand_id,
         discount,
-        images,
+        imageUrls,
         shop_id
       );
+
       if (!response) {
         return returnResponse(ERROR.ERROR_SAVE_DATA_INTO_DB, null, res, 500);
       }
@@ -90,6 +115,7 @@ class productController {
         discount,
         images,
       } = req.body;
+
       const isProductExisted = await getProductById(id);
       if (!isProductExisted) {
         return returnResponse(TOAST.PRODUCT_NOT_FOUND, null, res, 404);
@@ -109,7 +135,7 @@ class productController {
       if (isSkuExisted && isProductExisted.sku != sku) {
         return returnResponse(TOAST.SKU_EXISTED, null, res, 400);
       }
-      console.log("isCategoryExisted: ", isCategoryExisted);
+
       const response = await updateProductService(
         id,
         name,
@@ -122,9 +148,11 @@ class productController {
         discount,
         images
       );
+
       if (!response) {
         return returnResponse(ERROR.ERROR_SAVE_DATA_INTO_DB, null, res, 500);
       }
+
       return returnResponse(
         TOAST.UPDATE_PRODUCT_SUCCESSFULLY,
         response,
@@ -221,7 +249,12 @@ class productController {
   getBestSellingProduct = async (req, res) => {
     try {
       const data = await getBestSellingProduct();
-      return returnResponse("Get best selling products successfully", data, res, 200);
+      return returnResponse(
+        "Get best selling products successfully",
+        data,
+        res,
+        200
+      );
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
     }
