@@ -13,6 +13,7 @@ const userSchema = new Schema(
     verifyCode: { type: String, default: null },
     verifyCodeExpiresAt: { type: Date, default: null },
     avatar: { type: String, required: true },
+    phone: { type: String, default: null },
   },
   { timestamps: true }
 );

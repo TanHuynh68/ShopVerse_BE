@@ -1,15 +1,70 @@
 const returnResponse = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
+const { uploadToCloudinary } = require("../../utils/upload.utils");
 
 const {
   getUserService,
   getUserById,
   updateStatusUser,
   updateUserById,
+  updateAvatar,
 } = require("./users.services");
 
 class userController {
+  uploadAvatar = async (req, res) => {
+    try {
+      // check user
+      const { user_id } = req.user;
+      console.log('user_id', user_id)
+      const data = await getUserById(user_id);
+      if (!data) {
+        return returnResponse(TOAST.USER_NOT_FOUND, null, res, 404);
+      }
+      console.log('data: ', data)
+      // upload avatar to clould
+      let imageUrls = "";
+      const file = req.file ? req.file : {};
+      if (file) {
+        // optional: validate mimetype/size
+        if (!/^image\/(png|jpe?g|webp)$/.test(file.mimetype)) {
+          return returnResponse("Only png/jpg/webp allowed", null, res, 400);
+        }
+        // optional max size (e.g., 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          return returnResponse("Each file must be <= 5MB", null, res, 400);
+        }
+        // upload parallel
+        const uploadResults = await uploadToCloudinary(file.buffer, "products");
+        console.log("uploadResults: ", uploadResults);
+        imageUrls = uploadResults.secure_url;
+        console.log(imageUrls);
+      }
+      // check url
+      if (imageUrls === "") {
+        return returnResponse(
+          ERROR.INTERNAL_SERVER_ERROR,
+          "Cập nhật ảnh đại diện thất bại",
+          res,
+          500
+        );
+      }
+      // update
+      const response = await updateAvatar(user_id, imageUrls);
+      if (!response) {
+        return returnResponse(
+          ERROR.INTERNAL_SERVER_ERROR,
+          "Cập nhật ảnh đại diện xuống db thất bại",
+          res,
+          500
+        );
+      }
+      return returnResponse("Cập nhật ảnh đại diện thành công!", response, res, 200);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
   getUsers = async (req, res) => {
     try {
       const data = await getUserService();
@@ -17,7 +72,7 @@ class userController {
         return returnResponse("Get users successfully", data, res, 200);
       }
     } catch (error) {
-      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }
   };
 
@@ -26,11 +81,25 @@ class userController {
     try {
       const data = await getUserById(id);
       if (data) {
+        return returnResponse("Get user profile successfully", data, res, 200);
+      }
+      return returnResponse(TOAST.USER_NOT_FOUND, data, res, 404);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
+  getUserProfile = async (req, res) => {
+    const { user_id } = req.user;
+    console.log("user_id: ", user_id);
+    try {
+      const data = await getUserById(user_id);
+      if (data) {
         return returnResponse("Get user successfully", data, res, 200);
       }
       return returnResponse(TOAST.USER_NOT_FOUND, data, res, 404);
     } catch (error) {
-      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }
   };
 
@@ -60,7 +129,7 @@ class userController {
         200
       );
     } catch (error) {
-      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }
   };
 
@@ -79,7 +148,26 @@ class userController {
       }
       return returnResponse(TOAST.UPDATE_USER_SUCCESSFULLY, response, res, 200);
     } catch (error) {
-      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
+  updateUserProfile = async (req, res) => {
+    const { user_id } = req.user;
+    const { name, phone } = req.body;
+
+    try {
+      const data = await getUserById(user_id);
+      if (!data) {
+        return returnResponse(TOAST.USER_NOT_FOUND, null, res, 404);
+      }
+      const response = await updateUserById(user_id, name, phone);
+      if (!response) {
+        return returnResponse(ERROR.INTERNAL_SERVER_ERROR, null, res, 500);
+      }
+      return returnResponse(TOAST.UPDATE_USER_SUCCESSFULLY, response, res, 200);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }
   };
 }
