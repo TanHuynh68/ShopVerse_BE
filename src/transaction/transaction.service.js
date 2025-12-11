@@ -37,7 +37,7 @@ class transactionService {
   };
 
   getTransactionByUserId = async (userId) => {
-    const data = await Transaction.findOne({ userId }).populate('orderId', "-__v").select("-__v");
+    const data = await Transaction.find({ userId }).populate('orderId', "-__v").select("-__v");
     return data;
   };
 }

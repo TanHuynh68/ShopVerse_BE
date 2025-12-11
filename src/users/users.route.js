@@ -1,5 +1,5 @@
 var express = require("express");
-const { isUser } = require("../../utils/jwt");
+const { isUser, isAdmin } = require("../../utils/jwt");
 const usersController = require("./users.controller");
 var router = express.Router();
 const multer  = require('multer')
@@ -10,6 +10,7 @@ const upload = multer({
 
 router.route("/").get(usersController.getUsers);
 router.route("/profile").get(isUser, usersController.getUserProfile);
+router.route("/admin-profile").get(isAdmin, usersController.getUserProfile);
 router.route("/:id").get(usersController.getUser);
 router.route("/upload-avatar").patch(isUser, upload.single("avatar"), usersController.uploadAvatar);
 router.route("/update-profile").put(isUser,usersController.updateUserProfile);

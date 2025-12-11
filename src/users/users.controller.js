@@ -103,6 +103,19 @@ class userController {
     }
   };
 
+  getUserProfile = async (req, res) => {
+    const { shop_id } = req.user;
+    try {
+      const data = await getUserById(shop_id);
+      if (data) {
+        return returnResponse("Get admin info successfully", data, res, 200);
+      }
+      return returnResponse(TOAST.USER_NOT_FOUND, data, res, 404);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
   /**
    * This api will restore or sort delete user
    * @param {*} req
