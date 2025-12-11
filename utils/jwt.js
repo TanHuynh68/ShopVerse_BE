@@ -1,6 +1,6 @@
 const ENV = require("../config/env.config");
 var jwt = require("jsonwebtoken");
-const returnResponse = require("../constants/controller.constant");
+const {returnResponse} = require("../constants/controller.constant");
 const { ROLE } = require("../constants/role");
 
 const createToken = (data) => {

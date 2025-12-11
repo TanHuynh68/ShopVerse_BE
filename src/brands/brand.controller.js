@@ -1,4 +1,4 @@
-const returnResponse = require("../../constants/controller.constant");
+const {returnResponse} = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { getCategoryById } = require("../categories/categories.service");

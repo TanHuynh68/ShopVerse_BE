@@ -1,4 +1,4 @@
-const returnResponse = require("../../constants/controller.constant");
+const {returnResponse} = require("../../constants/controller.constant");
 const User = require("./users.schema");
 
 class usersService {
@@ -13,7 +13,7 @@ class usersService {
   };
 
   getUserById = async (_id) => {
-    const data = await User.findById({ _id }).select(
+    const data = await User.findById({_id}).select(
       "-password -verifyCode -verifyCodeExpiresAt -__v"
     );
     return data;

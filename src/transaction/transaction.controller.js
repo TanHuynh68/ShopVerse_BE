@@ -1,4 +1,4 @@
-const returnResponse = require("../../constants/controller.constant");
+const {returnResponse} = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { getOrderById, updateStatusOrder } = require("../orders/orders.service");
@@ -11,6 +11,7 @@ const {
 } = require("./transaction.service");
 
 class transactionController {
+
   getMyTransaction = async (req, res) => {
     try {
       const { user_id } = req.user;
@@ -29,10 +30,8 @@ class transactionController {
     try {
       const { user_id } = req.user;
       const { link } = req.body;
-      console.log("link: ", link);
       const parsedUrl = new URL(link);
       const params = Object.fromEntries(parsedUrl.searchParams.entries());
-      console.log("params: ", params);
       const {
         vnp_Amount,
         vnp_BankCode,

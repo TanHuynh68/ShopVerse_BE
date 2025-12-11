@@ -1,4 +1,4 @@
-const returnResponse = require("../../constants/controller.constant");
+const {returnResponse} = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { uploadToCloudinary } = require("../../utils/upload.utils");
@@ -103,7 +103,7 @@ class userController {
     }
   };
 
-  getUserProfile = async (req, res) => {
+  getAdminProfile = async (req, res) => {
     const { shop_id } = req.user;
     try {
       const data = await getUserById(shop_id);

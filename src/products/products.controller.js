@@ -1,4 +1,7 @@
-const returnResponse = require("../../constants/controller.constant");
+const {
+  returnResponse,
+  returnResponseQuery,
+} = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { uploadToCloudinary } = require("../../utils/upload.utils");
@@ -53,7 +56,7 @@ class productController {
       }
 
       let imageUrls = [];
-       const files = Array.isArray(req.files) ? req.files : [];
+      const files = Array.isArray(req.files) ? req.files : [];
       if (files.length > 0) {
         // optional: validate mimetype/size
         for (const f of files) {
@@ -73,7 +76,7 @@ class productController {
 
         imageUrls = uploadResults.map((r) => r.secure_url);
       }
-      console.log('imageUrls: ', imageUrls)
+      console.log("imageUrls: ", imageUrls);
       const response = await createProductService(
         name,
         description,
@@ -237,12 +240,30 @@ class productController {
   };
 
   getProducts = async (req, res) => {
-    const { category_id, sort } = req.query;
+    const { category_id, brand_id, sort } = req.query;
+    const page = parseInt(req.query.page) || 1; // mặc định trang 1
+    const limit = parseInt(req.query.size) || 100;
+    const skip = (page - 1) * limit;
     try {
-      const data = await getProductsQueryService(category_id, sort);
-      return returnResponse("Get products successfully", data, res, 200);
+      const response = await getProductsQueryService(
+        category_id,
+        brand_id,
+        sort,
+        limit,
+        skip
+      );
+      return returnResponseQuery(
+        "Get products successfully",
+        response.data,
+        res,
+        200,
+        page,
+        Math.ceil(response.total / limit),
+        limit,
+        response.total
+      );
     } catch (error) {
-      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }
   };
 

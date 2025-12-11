@@ -10,7 +10,7 @@ const upload = multer({
 
 router.route("/").get(usersController.getUsers);
 router.route("/profile").get(isUser, usersController.getUserProfile);
-router.route("/admin-profile").get(isAdmin, usersController.getUserProfile);
+router.route("/admin-profile").get(isAdmin, usersController.getAdminProfile);
 router.route("/:id").get(usersController.getUser);
 router.route("/upload-avatar").patch(isUser, upload.single("avatar"), usersController.uploadAvatar);
 router.route("/update-profile").put(isUser,usersController.updateUserProfile);

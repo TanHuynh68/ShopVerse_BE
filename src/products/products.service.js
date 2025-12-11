@@ -95,7 +95,7 @@ class productService {
       .select(" -__v -shop_id")
       .populate("brand_id")
       .populate("category_id")
-      .limit(10)
+      .limit(10);
     if (response) {
       return response;
     }
@@ -151,25 +151,47 @@ class productService {
     }
   };
 
-  getProductsQueryService = async (category_id, sort) => {
+  getProductsQueryService = async (
+    category_id,
+    brand_id,
+    sort,
+    limit,
+    skip
+  ) => {
     try {
       let sortQuery;
       sortQuery = this.sortProduct(sort);
-      console.log("sortQuery: ", sortQuery);
       const query = {
         isDeleted: false,
         isActive: true,
         category_id: category_id,
       };
-      const data = await Product.find(query)
-        .sort(sortQuery)
-        .populate("brand_id")
-        .populate("category_id")
-        .populate({
-          path: "shop_id",
-          select: "-password -__v -verifyCode -verifyCodeExpiresAt",
-        })
-      return data;
+      
+      let brandIds = [];
+      if (brand_id) {
+        brandIds = brand_id.split(",").map((id) => id.trim());
+      }
+      if (brandIds.length > 0) {
+        query.brand_id = { $in: brandIds };;
+      }
+      console.log('query: ', query)
+      const [data, total] = await Promise.all([
+        Product.find(query)
+          .sort(sortQuery)
+          .skip(skip)
+          .limit(limit)
+          .populate("brand_id")
+          .populate("category_id")
+          .populate({
+            path: "shop_id",
+            select: "-password -__v -verifyCode -verifyCodeExpiresAt",
+          }),
+        Product.countDocuments(query),
+      ]);
+      return {
+        data,
+        total,
+      };
     } catch (error) {
       return error;
     }

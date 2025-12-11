@@ -6,7 +6,7 @@ const {
   ProductCode,
 } = require("vnpay");
 const ENV = require("../../config/env.config");
-const returnResponse = require("../../constants/controller.constant");
+const {returnResponse} = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 
