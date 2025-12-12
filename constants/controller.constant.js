@@ -1,10 +1,11 @@
+
 const returnResponse = (message, data, res, statusCode) => {
   return res.status(statusCode).json({
     message: message,
     status_code: statusCode,
     totalItems: data?.length,
     ...(statusCode != 200 && statusCode != 201
-      ? { error: data }
+      ? { error: data.message }
       : { data: data }),
   });
 };
@@ -18,7 +19,7 @@ const returnResponseQuery = (message, data, res, statusCode, currentPage, totalP
     totalPages: totalPages,
     size: limit,
     ...(statusCode != 200 && statusCode != 201
-      ? { error: data }
+      ? { error: data.message }
       : { data: data }),
   });
 };

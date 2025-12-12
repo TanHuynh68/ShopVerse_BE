@@ -17,13 +17,6 @@ exports.validateCreateUser = [
     .withMessage("Email is required")
     .isEmail()
     .withMessage("Email is invalid"),
-
-  body("role")
-    .trim()
-    .notEmpty()
-    .withMessage("Role is required")
-    .isIn(Object.values(ROLE))
-    .withMessage(`Role must be one of: ${Object.values(ROLE).join(", ")}`),
 ];
 
 exports.validateLogin = [

@@ -1,5 +1,4 @@
-
-const {returnResponse} = require("../../constants/controller.constant");
+const { returnResponse } = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { sendVerifyCodeByEmail } = require("../email/email.service");
@@ -27,8 +26,8 @@ class authService {
     return null;
   };
 
-  createUser = async (name, password, email, role) => {
-    const data = await User.create({ name, password, email, role });
+  createUser = async (name, password, email) => {
+    const data = await User.create({ name, password, email });
     if (data) {
       return data;
     }

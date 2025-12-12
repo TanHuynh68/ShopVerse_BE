@@ -1,4 +1,4 @@
-const {returnResponse} = require("../../constants/controller.constant");
+const { returnResponse } = require("../../constants/controller.constant");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { hashPass, comparePassword } = require("../../utils/hashPassword.util");
@@ -12,21 +12,41 @@ const {
 } = require("./auth.services");
 //a
 class authController {
+  resendOtpVerity = async (req, res) => {
+    try {
+     const response = await sendCode(req, res);
+      returnResponse(TOAST.REGISTER_SUCCESSFULLY, response, res, 200);
+    } catch (error) {
+      return returnResponse(
+        ERROR.INTERNAL_SERVER_ERROR,
+        error,
+        res,
+        500
+      );
+    }
+  };
+
   register = async (req, res) => {
-    const { name, password, email, role } = req.body;
+    const { name, password, email } = req.body;
     try {
       const findEmail = await checkEmailExisted(email);
       if (findEmail) {
         return returnResponse(TOAST.EMAIL_EXISTED, null, res, 400);
       }
       const hashPassword = hashPass(password);
-      const data = await createUser(name, hashPassword, email, role);
+      const data = await createUser(name, hashPassword, email);
       if (data) {
         await sendCode(req, res);
         return returnResponse(TOAST.REGISTER_SUCCESSFULLY, data, res, 200);
       }
     } catch (error) {
-      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+      console.log(error);
+      return returnResponse(
+        ERROR.INTERNAL_SERVER_ERROR,
+        error.message,
+        res,
+        500
+      );
     }
   };
 
@@ -82,7 +102,12 @@ class authController {
       };
       return returnResponse(TOAST.LOGIN_SUCCESSFULLY, data, res, 200);
     } catch (error) {
-      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error || "Login failed", res, 500);
+      return returnResponse(
+        ERROR.INTERNAL_SERVER_ERROR,
+        error || "Login failed",
+        res,
+        500
+      );
     }
   };
 }

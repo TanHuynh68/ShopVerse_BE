@@ -1,4 +1,4 @@
-const {returnResponse} = require("../../constants/controller.constant");
+const { returnResponse } = require("../../constants/controller.constant");
 const User = require("./users.schema");
 
 class usersService {
@@ -13,7 +13,7 @@ class usersService {
   };
 
   getUserById = async (_id) => {
-    const data = await User.findById({_id}).select(
+    const data = await User.findById({ _id }).select(
       "-password -verifyCode -verifyCodeExpiresAt -__v"
     );
     return data;
@@ -43,7 +43,7 @@ class usersService {
     return null;
   };
 
-  updateAvatar= async (_id, avatar) => {
+  updateAvatar = async (_id, avatar) => {
     const data = await User.findByIdAndUpdate(
       _id,
       { avatar },
@@ -53,6 +53,21 @@ class usersService {
       return data;
     }
     return null;
+  };
+
+  userGetTotalOrders = async (startDate, endDate, user_id) => {
+    try {
+      const data = await Order.find({
+        userId: user_id,
+        createdAt: { $gte: startDate, $lte: endDate },
+      })
+        .select(" -__v")
+        .sort({ createdAt: -1 })
+        .populate("items.productId");
+      return data;
+    } catch (error) {
+      return error || "Admin get all orders service failed!";
+    }
   };
 }
 

@@ -12,7 +12,7 @@ const userSchema = new Schema(
     role: { type: String, enum: ["USER", "ADMIN"], default: "USER" },
     verifyCode: { type: String, default: null },
     verifyCodeExpiresAt: { type: Date, default: null },
-    avatar: { type: String, required: true },
+    avatar: { type: String},
     phone: { type: String, default: null },
   },
   { timestamps: true }
