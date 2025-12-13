@@ -3,26 +3,63 @@ const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { hashPass, comparePassword } = require("../../utils/hashPassword.util");
 const { createToken } = require("../../utils/jwt");
-
+const { jwtDecode } = require("jwt-decode");
 const {
   checkEmailExisted,
   createUser,
   sendCode,
   activeUser,
 } = require("./auth.services");
+const { getUserByEmail } = require("../users/users.services");
 //a
 class authController {
+  requestLoginGoogle = async (req, res) => {
+    try {
+      const { token } = req.body;
+      const decoded = jwtDecode(token);
+      if (!decoded) {
+        return returnResponse("Invalid token", decoded, res, 400);
+      }
+       console.log("decoded: ", decoded);
+      // check email isExisted ?
+      const isEmailExisted = await getUserByEmail(decoded.email);
+      console.log("isEmailExisted: ", isEmailExisted);
+      // if email did not existed => create new user with type google
+      if (!isEmailExisted) {
+        const name = decoded.family_name + " " + decoded.given_name;
+        const newUser = await createUser(
+          name,
+          null,
+          decoded.email,
+          "GOOGLE",
+          decoded.picture,
+          decoded.email_verified
+        );
+        return returnResponse(
+          TOAST.REGISTER_WITH_GOOGLE_SUCCESSFULLY,
+          newUser,
+          res,
+          201
+        );
+      }
+      console.log("isEmailExisted: ", isEmailExisted);
+      // if email existed => Login
+      const tokenLogin = createToken(isEmailExisted);
+      const data = {
+        accessToken: tokenLogin,
+      };
+      return returnResponse(TOAST.LOGIN_SUCCESSFULLY, data, res, 200);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
   resendOtpVerity = async (req, res) => {
     try {
-     const response = await sendCode(req, res);
+      const response = await sendCode(req, res);
       returnResponse(TOAST.REGISTER_SUCCESSFULLY, response, res, 200);
     } catch (error) {
-      return returnResponse(
-        ERROR.INTERNAL_SERVER_ERROR,
-        error,
-        res,
-        500
-      );
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }
   };
 

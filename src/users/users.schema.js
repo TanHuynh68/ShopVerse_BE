@@ -15,6 +15,7 @@ const userSchema = new Schema(
     avatar: { type: String},
     phone: { type: String, default: null },
     resetPasswordToken: { type: String, default: null },
+    accountType: { type: String,  enum: ["NORMAL", "GOOGLE"], default: "NORMAL" },
   },
   { timestamps: true }
 );

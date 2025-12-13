@@ -2,7 +2,7 @@ const ENV = require("../config/env.config");
 var jwt = require("jsonwebtoken");
 const { returnResponse } = require("../constants/controller.constant");
 const { ROLE } = require("../constants/role");
-const { getUserById, getAllUserData } = require("../src/users/users.services");
+const {getAllUserData } = require("../src/users/users.services");
 
 const createToken = (data) => {
   const token = jwt.sign(

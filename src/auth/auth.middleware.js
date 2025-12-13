@@ -35,3 +35,11 @@ exports.validateLogin = [
     .withMessage("email is invalid"),
 ];
 
+exports.validateLoginGoogle = [
+  body("token")
+    .trim()
+    .notEmpty()
+    .withMessage("token is required"),
+];
+
+

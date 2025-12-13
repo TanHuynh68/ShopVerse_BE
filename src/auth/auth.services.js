@@ -26,8 +26,14 @@ class authService {
     return null;
   };
 
-  createUser = async (name, password, email) => {
-    const data = await User.create({ name, password, email });
+  createUser = async (name, password, email, type, avatar, isActive) => {
+    const query = { name, password, email };
+    if (type && avatar && isActive) {
+      query.type = type;
+      query.avatar = avatar;
+      query.isActive = isActive;
+    }
+    const data = await User.create(query);
     if (data) {
       return data;
     }
