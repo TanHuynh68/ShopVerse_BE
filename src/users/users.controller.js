@@ -15,7 +15,7 @@ const {
   getUserByEmail,
   updateReqPasswordToken,
 } = require("./users.services");
-const { redirect } = require("react-router-dom");
+
 const ENV = require("../../config/env.config");
 
 // // get verify code and check isValid
@@ -51,7 +51,7 @@ class userController {
         hashedToken
       );
       if (saveHashedToken) {
-        redirect(`/${ENV.FE_RETURN_URL}/reset-password?token=${token}`)
+        res.redirect(`/${ENV.FE_RETURN_URL}/reset-password?token=${token}`)
       }
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
