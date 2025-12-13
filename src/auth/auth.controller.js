@@ -13,12 +13,13 @@ const {
 const { getUserByEmail } = require("../users/users.services");
 //a
 class authController {
+
   requestLoginGoogle = async (req, res) => {
     try {
       const { token } = req.body;
       const decoded = jwtDecode(token);
       if (!decoded) {
-        return returnResponse("Invalid token", decoded, res, 400);
+        return returnResponse("Invalid google token", decoded, res, 400);
       }
        console.log("decoded: ", decoded);
       // check email isExisted ?
@@ -103,7 +104,7 @@ class authController {
           return returnResponse(TOAST.VERIFY_CODE_EXPIRED, null, res, 400);
         }
         const response = await activeUser(user._id);
-        console.log("activeUser: ", response);
+x
         if (response) {
           return returnResponse(TOAST.VERIFY_SUCCESSFULLY, response, res, 200);
         } else {

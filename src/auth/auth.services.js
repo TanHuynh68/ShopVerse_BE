@@ -43,7 +43,7 @@ class authService {
   saveVerifyCode = async (_id, verifyCode) => {
     const data = await User.findOneAndUpdate(_id, {
       verifyCode,
-      verifyCodeExpiresAt: new Date(Date.now() + 5 * 60 * 1000),
+      verifyCodeExpiresAt: new Date(Date.now() + 15 * 60 * 1000),
     });
     if (data) {
       return data;
