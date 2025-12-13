@@ -97,7 +97,7 @@ class productController {
         TOAST.CREATE_PRODUCT_SUCCESSFULLY,
         response,
         res,
-        200
+        201
       );
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);

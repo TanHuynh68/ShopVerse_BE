@@ -14,6 +14,7 @@ const userSchema = new Schema(
     verifyCodeExpiresAt: { type: Date, default: null },
     avatar: { type: String},
     phone: { type: String, default: null },
+    resetPasswordToken: { type: String, default: null },
   },
   { timestamps: true }
 );

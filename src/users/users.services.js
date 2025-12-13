@@ -2,6 +2,43 @@ const { returnResponse } = require("../../constants/controller.constant");
 const User = require("./users.schema");
 
 class usersService {
+  getUserByEmail = async (email) => {
+    const data = await User.findOne({ email });
+    if (data) {
+      return data;
+    }
+    return null;
+  };
+
+  getAllUserData = async (_id) => {
+    const data = await User.findById({ _id });
+    return data;
+  };
+
+  updateReqPasswordToken = async (_id, hashedToken) => {
+    const data = await User.findByIdAndUpdate(
+      _id,
+      { resetPasswordToken: hashedToken },
+      { new: true }
+    ).select("-password -verifyCode -verifyCodeExpiresAt -__v");
+    if (data) {
+      return data;
+    }
+    return null;
+  };
+
+  updatePassword = async (_id, newPassword) => {
+    const data = await User.findByIdAndUpdate(
+      _id,
+      { password: newPassword },
+      { new: true }
+    ).select("-password -verifyCode -verifyCodeExpiresAt -__v");
+    if (data) {
+      return data;
+    }
+    return null;
+  };
+
   getUserService = async () => {
     const data = await User.find({})
       .sort({ createdAt: -1 })

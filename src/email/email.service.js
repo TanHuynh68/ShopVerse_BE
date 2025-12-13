@@ -1,5 +1,6 @@
 const { transporter } = require("../../config/email.config");
-
+var AES = require("crypto-js/aes");
+var SHA256 = require("crypto-js/sha256");
 class emailSerivce {
   // Create a transporter for SMTP
   sendVerifyCodeByEmail = async (email) => {
