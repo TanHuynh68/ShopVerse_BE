@@ -4,6 +4,28 @@ const TOAST = require("../../message/toast.message");
 const { sendVerifyCodeByEmail } = require("../email/email.service");
 const User = require("../users/users.schema");
 class authService {
+  
+  checkTokenUser = async (resetPasswordToken) => {
+    const data = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    }).select("-password -verifyCode -verifyCodeExpiresAt -__v");
+    return data;
+  };
+
+  updateNewPassword = async (_id, hashPass) => {
+    const data = await User.findByIdAndUpdate(
+      _id,
+      {
+        password: hashPass,
+        resetPasswordExpire: null,
+        resetPasswordToken: null,
+      },
+      { new: true }
+    ).select("resetPasswordToken resetPasswordExpire name role");;
+    return data;
+  };
+
   activeUser = async (_id) => {
     const data = await User.findOneAndUpdate(
       _id,
@@ -26,10 +48,10 @@ class authService {
     return null;
   };
 
-  createUser = async (name, password, email, type, avatar, isActive) => {
+  createUser = async (name, password, email, accountType, avatar, isActive) => {
     const query = { name, password, email };
-    if (type && avatar && isActive) {
-      query.type = type;
+    if (accountType && avatar && isActive) {
+      query.accountType = accountType;
       query.avatar = avatar;
       query.isActive = isActive;
     }

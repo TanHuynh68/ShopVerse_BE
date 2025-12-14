@@ -43,13 +43,16 @@ const TOAST = {
   // transaction
   ORDER_HAD_TRANSACTION: "Order paid",
   CREATE_TRANSACTION_SUCCESSFULLY: "Create new transaction successfully",
-  LINK_IS_NOT_VALID: "Link is not valid!",
+  LINK_IS_NOT_VALID: "Link  inValid!",
   GET_TRANSACTION_SUCCESSFULLY: "Get transaction successfully",
   //
   WRONG_PASSWORD: "Wrong password!",
   UPDATE_PASSWORD_SUCCESSFULLY: "Update password successfully!",
   //
-   UPDATE_REQ_FORGOT_PASSWORD_TOKEN_SUCCESSFULLY: "Update req forgot password token successfully!",
+  UPDATE_REQ_FORGOT_PASSWORD_TOKEN_SUCCESSFULLY:
+    "Update req forgot password token successfully!",
+  TOKEN_INVALID: "Token inValid or expired!",
+  UPDATE_PASSWORD_SUCCESSFULLY: "Update password successfully",
 };
 
 module.exports = TOAST;

@@ -18,13 +18,13 @@ class usersService {
   updateReqPasswordToken = async (_id, hashedToken) => {
     const data = await User.findByIdAndUpdate(
       _id,
-      { resetPasswordToken: hashedToken },
+      {
+        resetPasswordToken: hashedToken,
+        resetPasswordExpire: Date.now() + 15 * 60 * 1000,
+      },
       { new: true }
     ).select("-password -verifyCode -verifyCodeExpiresAt -__v");
-    if (data) {
-      return data;
-    }
-    return null;
+    return data;
   };
 
   updatePassword = async (_id, newPassword) => {

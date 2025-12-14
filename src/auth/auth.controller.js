@@ -10,12 +10,15 @@ const {
   createUser,
   sendCode,
   activeUser,
+  checkTokenUser,
+  updateNewPassword,
 } = require("./auth.services");
 const {
   getUserByEmail,
   updateReqPasswordToken,
 } = require("../users/users.services");
 const ENV = require("../../config/env.config");
+const { query } = require("express");
 
 //a
 class authController {
@@ -36,7 +39,37 @@ class authController {
         .digest("hex");
       // save
       await updateReqPasswordToken(user._id, hashedToken);
-      return returnResponse(TOAST.REQUEST_FORGOT_PASSWORD_SUCCESSFULLY, token, res, 200);
+      return returnResponse(
+        TOAST.REQUEST_FORGOT_PASSWORD_SUCCESSFULLY,
+        token,
+        res,
+        200
+      );
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
+
+  resetNewPassword = async (req, res) => {
+    try {
+      const { token } = req.query;
+      const { newPassword } = req.body;
+      const hashedToken = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+      const user = await checkTokenUser(hashedToken);
+      if (!user) {
+        return returnResponse(TOAST.TOKEN_INVALID, user, res, 400);
+      }
+      const hashPassword = hashPass(newPassword);
+      const updatePassword = await updateNewPassword(user._id, hashPassword);
+      return returnResponse(
+        TOAST.UPDATE_PASSWORD_SUCCESSFULLY,
+        updatePassword,
+        res,
+        200
+      );
     } catch (error) {
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }

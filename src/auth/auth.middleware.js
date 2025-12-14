@@ -1,5 +1,5 @@
-const { body } = require("express-validator");
-const { ROLE } = require("../../constants/role");
+const { body, query } = require("express-validator");
+
 
 exports.validateCreateUser = [
   body("name").trim().notEmpty().withMessage("Name is required"),
@@ -35,4 +35,9 @@ exports.validateLoginGoogle = [
 
 exports.validateLForgotPassword = [
   body("email").trim().notEmpty().withMessage("email is required"),
+];
+
+exports.validateLResetNewPassword = [
+  body("newPassword").trim().notEmpty().withMessage("newPassword is required"),
+  query("token").trim().notEmpty().withMessage("token is required"),
 ];
