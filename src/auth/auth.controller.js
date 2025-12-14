@@ -1,4 +1,5 @@
 const { returnResponse } = require("../../constants/controller.constant");
+const crypto = require("crypto");
 const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { hashPass, comparePassword } = require("../../utils/hashPassword.util");
@@ -10,9 +11,36 @@ const {
   sendCode,
   activeUser,
 } = require("./auth.services");
-const { getUserByEmail } = require("../users/users.services");
+const {
+  getUserByEmail,
+  updateReqPasswordToken,
+} = require("../users/users.services");
+const ENV = require("../../config/env.config");
+
 //a
 class authController {
+  requestForgotPassword = async (req, res) => {
+    try {
+      const { email } = req.body;
+      // check user
+      const user = await getUserByEmail(email);
+      if (!user) {
+        return returnResponse(TOAST.USER_NOT_FOUND, user, res, 404);
+      }
+      // create token
+      const token = crypto.randomBytes(32).toString("hex");
+      // hash token
+      const hashedToken = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+      // save
+      await updateReqPasswordToken(user._id, hashedToken);
+      return returnResponse(TOAST.REQUEST_FORGOT_PASSWORD_SUCCESSFULLY, token, res, 200);
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
 
   requestLoginGoogle = async (req, res) => {
     try {
@@ -21,10 +49,9 @@ class authController {
       if (!decoded) {
         return returnResponse("Invalid google token", decoded, res, 400);
       }
-       console.log("decoded: ", decoded);
+      console.log("decoded: ", decoded);
       // check email isExisted ?
       const isEmailExisted = await getUserByEmail(decoded.email);
-      console.log("isEmailExisted: ", isEmailExisted);
       // if email did not existed => create new user with type google
       if (!isEmailExisted) {
         const name = decoded.family_name + " " + decoded.given_name;
@@ -36,14 +63,22 @@ class authController {
           decoded.picture,
           decoded.email_verified
         );
+        const tokenLogin = createToken({
+          name,
+          email: decoded.email,
+          role: newUser.role,
+          _id: newUser._id,
+        });
+        const data = {
+          accessToken: tokenLogin,
+        };
         return returnResponse(
           TOAST.REGISTER_WITH_GOOGLE_SUCCESSFULLY,
-          newUser,
+          data,
           res,
           201
         );
       }
-      console.log("isEmailExisted: ", isEmailExisted);
       // if email existed => Login
       const tokenLogin = createToken(isEmailExisted);
       const data = {
@@ -104,7 +139,6 @@ class authController {
           return returnResponse(TOAST.VERIFY_CODE_EXPIRED, null, res, 400);
         }
         const response = await activeUser(user._id);
-x
         if (response) {
           return returnResponse(TOAST.VERIFY_SUCCESSFULLY, response, res, 200);
         } else {

@@ -6,16 +6,20 @@ const userSchema = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String },
     isActive: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
     role: { type: String, enum: ["USER", "ADMIN"], default: "USER" },
     verifyCode: { type: String, default: null },
     verifyCodeExpiresAt: { type: Date, default: null },
-    avatar: { type: String},
+    avatar: { type: String },
     phone: { type: String, default: null },
     resetPasswordToken: { type: String, default: null },
-    accountType: { type: String,  enum: ["NORMAL", "GOOGLE"], default: "NORMAL" },
+    accountType: {
+      type: String,
+      enum: ["NORMAL", "GOOGLE"],
+      default: "NORMAL",
+    },
   },
   { timestamps: true }
 );

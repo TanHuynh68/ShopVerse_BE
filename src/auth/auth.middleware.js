@@ -4,12 +4,9 @@ const { ROLE } = require("../../constants/role");
 exports.validateCreateUser = [
   body("name").trim().notEmpty().withMessage("Name is required"),
 
-  body("password")
-    .trim()
-    .notEmpty()
-    .withMessage("Password is required"),
-    // .isLength({ min: 6 })
-    // .withMessage("Password must be at least 6 characters"),
+  body("password").trim().notEmpty().withMessage("Password is required"),
+  // .isLength({ min: 6 })
+  // .withMessage("Password must be at least 6 characters"),
 
   body("email")
     .trim()
@@ -20,12 +17,9 @@ exports.validateCreateUser = [
 ];
 
 exports.validateLogin = [
-  body("password")
-    .trim()
-    .notEmpty()
-    .withMessage("password is required"),
-    // .isLength({ min: 6 })
-    // .withMessage("Password must be at least 6 characters"),
+  body("password").trim().notEmpty().withMessage("password is required"),
+  // .isLength({ min: 6 })
+  // .withMessage("Password must be at least 6 characters"),
 
   body("email")
     .trim()
@@ -36,10 +30,9 @@ exports.validateLogin = [
 ];
 
 exports.validateLoginGoogle = [
-  body("token")
-    .trim()
-    .notEmpty()
-    .withMessage("token is required"),
+  body("token").trim().notEmpty().withMessage("token is required"),
 ];
 
-
+exports.validateLForgotPassword = [
+  body("email").trim().notEmpty().withMessage("email is required"),
+];

@@ -3,7 +3,7 @@ const ERROR = require("../../message/err.message");
 const TOAST = require("../../message/toast.message");
 const { comparePassword, hashPass } = require("../../utils/hashPassword.util");
 const { uploadToCloudinary } = require("../../utils/upload.utils");
-const crypto = require("crypto");
+
 const {
   getUserService,
   getUserById,
@@ -11,57 +11,16 @@ const {
   updateUserById,
   updateAvatar,
   updatePassword,
-  checkEmailExisted,
-  getUserByEmail,
-  updateReqPasswordToken,
+
 } = require("./users.services");
 
 const ENV = require("../../config/env.config");
 
-// // get verify code and check isValid
-// const isVerifyCodeValid = await verify(req, res);
-// if (isVerifyCodeValid.statusCode != 200) {
-//   return returnResponse(
-//     TOAST.VERIFY_CODE_EXPIRED,
-//     isVerifyCodeValid.error,
-//     res,
-//     400
-//   );
-// }
-// check user isValid
 class userController {
-  requestForgotPassword = async (req, res) => {
-    try {
-      const { email } = req.body;
-      // check user
-      const user = await getUserByEmail(email);
-      if (!user) {
-        return returnResponse(TOAST.USER_NOT_FOUND, user, res, 404);
-      }
-      // create token
-      const token = crypto.randomBytes(32).toString("hex");
-      // hash token
-      const hashedToken = crypto
-        .createHash("sha256")
-        .update(token)
-        .digest("hex");
-      // save
-      const saveHashedToken = await updateReqPasswordToken(
-        user._id,
-        hashedToken
-      );
-      if (saveHashedToken) {
-        res.redirect(`/${ENV.FE_RETURN_URL}/reset-password?token=${token}`)
-      }
-    } catch (error) {
-      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
-    }
-  };
 
   resetPassword = async (req, res) => {
     try {
       const { user, user_id } = req.user;
-
       const { oldPassword, newPassword } = req.body;
       const isOldPasswordCorrect = await comparePassword(
         oldPassword,

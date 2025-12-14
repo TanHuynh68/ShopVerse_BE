@@ -4,6 +4,7 @@ const TOAST = {
   EMAIL_IS_NOT_EXISTED: "Email is not exist!",
   REGISTER_SUCCESSFULLY: "Register Successfully!",
   REGISTER_WITH_GOOGLE_SUCCESSFULLY: "Register with google successfully!",
+  REQUEST_FORGOT_PASSWORD_SUCCESSFULLY: "Request forgot password successfully!",
   SEND_EMAIL_SUCCESSFULLY: "Send email successfully",
   SEND_EMAIL_FAILED: "Send email fail",
   USER_NOT_FOUND: "User not found!",
