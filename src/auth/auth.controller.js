@@ -197,6 +197,9 @@ class authController {
       if (user.isDeleted) {
         return returnResponse(TOAST.USER_BANNED, null, res, 401);
       }
+      if(user.password === null){
+        return returnResponse(TOAST.PASSWORD_NULL, 'Bad request', res, 400);
+      }
       const isPasswordCorrect = await comparePassword(password, user.password);
       if (!isPasswordCorrect) {
         return returnResponse(TOAST.IN_CORRECT_PASSWORD, null, res, 401);

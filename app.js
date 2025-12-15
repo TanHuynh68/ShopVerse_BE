@@ -1,16 +1,24 @@
 var createError = require("http-errors");
+// const { createServer } = require('node:http');
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var app = express();
 var indexRouter = require("./routes/index");
-require("dotenv").config();
-var ENV = require("./config/env.config");
+
+// const { Server } = require('socket.io');
+// const server = createServer(app);
+// const io = new Server(server);
+// io.on('connection', (socket) => {
+//   console.log('a user connected');
+// });
+
 var cors = require("cors");
 var connectDB = require("./config/db.config");
 app.use(cors());
-connectDB();
+
+connectDB()
 // var client = require('./config/redis.config')
 app.use(logger("dev"));
 app.use(express.json());
@@ -39,5 +47,6 @@ app.use(function (err, req, res, next) {
     error:  err.message  // tránh leak lỗi ở production
   });
 });
+
 
 module.exports = app;

@@ -34,7 +34,7 @@ class brandController {
       });
       return returnResponse("Get brands successfully", brands, res, 200);
     } catch (error) {
-      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }
   };
 
@@ -46,7 +46,7 @@ class brandController {
         return returnResponse("Get brand successfully", data, res, 200);
       }
     } catch (error) {
-      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, err, res, 500);
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }
   };
 

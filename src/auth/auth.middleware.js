@@ -26,7 +26,6 @@ exports.validateLogin = [
     .notEmpty()
     .withMessage("email is required")
     .isEmail()
-    .withMessage("email is invalid"),
 ];
 
 exports.validateLoginGoogle = [

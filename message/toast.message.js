@@ -48,6 +48,7 @@ const TOAST = {
   //
   WRONG_PASSWORD: "Wrong password!",
   UPDATE_PASSWORD_SUCCESSFULLY: "Update password successfully!",
+  PASSWORD_NULL: "Your account don't have password. Please login with google and update you password!",
   //
   UPDATE_REQ_FORGOT_PASSWORD_TOKEN_SUCCESSFULLY:
     "Update req forgot password token successfully!",
