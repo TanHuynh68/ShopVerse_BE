@@ -6,6 +6,7 @@ const {
   validateLoginGoogle,
   validateLForgotPassword,
   validateLResetNewPassword,
+  loginLimiter,
 } = require("./auth.middleware");
 const { validate } = require("../../utils/validate.util");
 var router = express.Router();
@@ -15,7 +16,7 @@ router
   .post(validateCreateUser, validate, authController.register);
 router.route("/verify").post(authController.verify);
 router.route("/resend-verify").post(authController.resendOtpVerity);
-router.route("/login").post(validateLogin, validate, authController.login);
+router.route("/login").post(loginLimiter, validateLogin, validate, authController.login);
 router
   .route("/login-google")
   .post(validateLoginGoogle, validate, authController.requestLoginGoogle);

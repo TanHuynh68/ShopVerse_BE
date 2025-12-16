@@ -1,7 +1,11 @@
- const ROLE={
-    ADMIN: "ADMIN",
-    USER: "USER",
-    SHOP: "SHOP"
-}
+const ROLE = {
+  ADMIN: "ADMIN",
+  USER: "USER",
+  SHOP: "SHOP",
+};
 
-module.exports = { ROLE };
+const ACCOUNT_TYPE = {
+  GOOGLE: "GOOGLE",
+  NORMAL: "NORMAL",
+};
+module.exports = { ROLE, ACCOUNT_TYPE };

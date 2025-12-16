@@ -46,6 +46,7 @@ const TOAST = {
   LINK_IS_NOT_VALID: "Link  inValid!",
   GET_TRANSACTION_SUCCESSFULLY: "Get transaction successfully",
   //
+  ACCOUNT_TYPE_INVALID: "Account type invalid or password is not null!",
   WRONG_PASSWORD: "Wrong password!",
   UPDATE_PASSWORD_SUCCESSFULLY: "Update password successfully!",
   PASSWORD_NULL: "Your account don't have password. Please login with google and update you password!",

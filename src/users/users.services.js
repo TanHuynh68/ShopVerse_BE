@@ -33,10 +33,7 @@ class usersService {
       { password: newPassword },
       { new: true }
     ).select("-password -verifyCode -verifyCodeExpiresAt -__v");
-    if (data) {
-      return data;
-    }
-    return null;
+    return data;
   };
 
   getUserService = async () => {

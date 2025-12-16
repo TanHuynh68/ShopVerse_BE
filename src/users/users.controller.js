@@ -11,12 +11,34 @@ const {
   updateUserById,
   updateAvatar,
   updatePassword,
-
 } = require("./users.services");
 
 const ENV = require("../../config/env.config");
+const { ACCOUNT_TYPE } = require("../../constants/role");
 
 class userController {
+
+  updatePasswordForGoogleAccount = async (req, res) => {
+    try {
+      const { user_id, user } = req.user;
+      console.log(user.accountType != ACCOUNT_TYPE.GOOGLE)
+      console.log(user.password === null)
+      if (user.accountType != ACCOUNT_TYPE.GOOGLE || user.password != null) {
+        return returnResponse(TOAST.ACCOUNT_TYPE_INVALID, 'Bad request', res, 400);
+      }
+      const { newPassword } = req.body;
+      const hashNewPassword = hashPass(newPassword);
+      const updateNewPassword = await updatePassword(user_id, hashNewPassword);
+      return returnResponse(
+        TOAST.UPDATE_PASSWORD_SUCCESSFULLY,
+        updateNewPassword,
+        res,
+        200
+      );
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
 
   resetPassword = async (req, res) => {
     try {
