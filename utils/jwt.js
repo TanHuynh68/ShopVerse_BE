@@ -12,6 +12,7 @@ const createToken = (data) => {
         role: data.role,
         name: data.name,
         account_id: data._id,
+        isPasswordExisted: data.isPasswordExisted
       },
     },
     ENV.SECRET,

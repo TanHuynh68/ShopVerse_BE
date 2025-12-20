@@ -30,7 +30,7 @@ class usersService {
   updatePassword = async (_id, newPassword) => {
     const data = await User.findByIdAndUpdate(
       _id,
-      { password: newPassword },
+      { password: newPassword, isPasswordExisted: true },
       { new: true }
     ).select("-password -verifyCode -verifyCodeExpiresAt -__v");
     return data;

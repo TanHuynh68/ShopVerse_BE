@@ -21,6 +21,8 @@ const userSchema = new Schema(
       enum: ["NORMAL", "GOOGLE"],
       default: "NORMAL",
     },
+    // when register = google, user will not have passwword, use this field to show for fe
+    isPasswordExisted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
