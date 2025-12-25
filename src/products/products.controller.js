@@ -240,16 +240,16 @@ class productController {
   };
 
   getProducts = async (req, res) => {
-    const { category_id, brand_id, sort } = req.query;
-    const page = parseInt(req.query.page) || 1; // mặc định trang 1
-    const limit = parseInt(req.query.size) || 100;
-    const skip = (page - 1) * limit;
-    //check category isValid
-    const isCateExisted = await getCategoryById(category_id);
-    if (!isCateExisted) {
-      return returnResponse(TOAST.CART_NOT_FOUND, "Bad request", res, 404);
-    }
     try {
+      const { category_id, brand_id, sort } = req.query;
+      const page = parseInt(req.query.page) || 1; // mặc định trang 1
+      const limit = parseInt(req.query.size) || 100;
+      const skip = (page - 1) * limit;
+      //check category isValid
+      const isCateExisted = await getCategoryById(category_id);
+      if (!isCateExisted) {
+        return returnResponse(TOAST.CART_NOT_FOUND, "Bad request", res, 404);
+      }
       const response = await getProductsQueryService(
         category_id,
         brand_id,
@@ -257,6 +257,7 @@ class productController {
         limit,
         skip
       );
+      console.log('response: ', response)
       return returnResponseQuery(
         "Get products successfully",
         response.data,

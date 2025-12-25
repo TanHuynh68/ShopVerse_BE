@@ -55,6 +55,11 @@ const TOAST = {
     "Update req forgot password token successfully!",
   TOKEN_INVALID: "Token inValid or expired!",
   UPDATE_PASSWORD_SUCCESSFULLY: "Update password successfully",
+  // review
+  CREATE_REVIEW_SUCCESSFULLY: "Create new review successfully",
+  REVIEWED_THIS_PRODUCT: "You review this product!",
+  PRODUCT_HAS_NOT_BOUGHT: "Product has not bought!",
+   GET_REVIEW_SUCCESSFULLY: "Get review successfully",
 };
 
 module.exports = TOAST;

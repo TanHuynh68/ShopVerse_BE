@@ -1,3 +1,4 @@
+const Brand = require("../brands/brands.schema");
 const Product = require("./products.schema");
 
 class productService {
@@ -166,15 +167,19 @@ class productService {
         isActive: true,
         category_id: category_id,
       };
-      
+
       let brandIds = [];
       if (brand_id) {
         brandIds = brand_id.split(",").map((id) => id.trim());
+        const brands = await Brand.find({
+          _id: { $in: brandIds },
+          isDeleted: false,
+        }).select("_id");
       }
       if (brandIds.length > 0) {
-        query.brand_id = { $in: brandIds };;
+        query.brand_id = { $in: brandIds };
       }
-      console.log('query: ', query)
+      console.log("query: ", query);
       const [data, total] = await Promise.all([
         Product.find(query)
           .sort(sortQuery)

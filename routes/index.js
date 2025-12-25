@@ -11,6 +11,7 @@ var paymentsRoute = require("../src/payment/payment.route");
 var ordersRoute = require("../src/orders/orders.route");
 var transactionRoute = require("../src/transaction/transaction.route");
 var dashboardRoute = require("../src/dashboard/dashboard.route");
+var reviewsRoute = require("../src/reviews/reviews.route");
 
 router.use("/auth", authRoute);
 router.use("/email", emailRoute);
@@ -23,5 +24,5 @@ router.use("/payments", paymentsRoute)
 router.use("/orders", ordersRoute)
 router.use("/transactions", transactionRoute);
 router.use("/dashboards", dashboardRoute);
-
+router.use("/reviews", reviewsRoute);
 module.exports = router;
