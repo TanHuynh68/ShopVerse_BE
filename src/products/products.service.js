@@ -68,7 +68,7 @@ class productService {
   };
 
   getProductById = async (_id) => {
-    const response = await Product.findById({ _id })
+    const response = await Product.findById({ _id, isDeleted: false })
       .select(" -__v")
       .populate("brand_id")
       .populate("category_id")

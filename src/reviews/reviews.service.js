@@ -21,10 +21,22 @@ class reviewService {
     return data;
   };
 
+  getReviewById = async (_id) => {
+    const data = await Review.findById(_id,{ isDeleted: false });
+    return data;
+  };
+
   getReviewByUser = async (reviewer, product) => {
     const data = await Review.findOne({
       reviewer,
       product,
+    });
+    return data;
+  };
+
+  updateLike = async (_id, likes) => {
+    const data = await Review.findByIdAndUpdate(_id, {
+      likes,
     });
     return data;
   };

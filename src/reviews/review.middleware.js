@@ -35,3 +35,7 @@ exports.validateQueryGetReviewsByProduct = [
     .custom((value) => mongoose.Types.ObjectId.isValid(value))
     .withMessage("id is required on query and must be valid"),
 ];
+
+exports.validateLikeReview = [
+  body("reviewId").trim().notEmpty().withMessage("reviewId is required"),
+];

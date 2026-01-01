@@ -11,9 +11,55 @@ const {
   getReviewByUser,
   getPaidOrder,
   getReviewsByProductId,
+  getReviewById,
+  updateLike,
 } = require("./reviews.service");
 
 class reivewController {
+  // customer like review
+  likeReview = async (req, res) => {
+    try {
+      const { reviewId } = req.body;
+      const { user_id } = req.user;
+      const isReviewExisted = await getReviewById(reviewId);
+      console.log('isReviewExisted: ', isReviewExisted)
+      if (!isReviewExisted) {
+        return returnResponse(
+          TOAST.REVIEW_NOT_FOUND,
+          isReviewExisted,
+          res,
+          404
+        );
+      }
+      // check product of review
+      const isProductExisted = await getProductById(isReviewExisted.product);
+      if (!isProductExisted) {
+        return returnResponse(
+          TOAST.PRODUCT_NOT_FOUND,
+          isProductExisted,
+          res,
+          404
+        );
+      }
+      let isLiked = isReviewExisted.likes.includes(user_id);
+      if (!isLiked) {
+        isReviewExisted.likes.push(user_id);
+      } else {
+        isReviewExisted.likes.pull(user_id);
+      }
+      const update = await updateLike(reviewId, isReviewExisted.likes);
+      if (update) {
+        return returnResponse(
+          TOAST.UPDATE_LIKE_REVIEW_SUCCESSFULLY,
+          { isLiked: !isLiked },
+          res,
+          200
+        );
+      }
+    } catch (error) {
+      return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
+    }
+  };
   getReviewsByProduct = async (req, res) => {
     try {
       // id = product id
@@ -21,13 +67,13 @@ class reivewController {
       const limit = parseInt(req.query.size);
       const page = parseInt(req.query.page);
       const skip = (page - 1) * limit;
-      // check id 
-      const isProductExisted = await getProductById(id)
-      if(!isProductExisted){
+      // check id
+      const isProductExisted = await getProductById(id);
+      if (!isProductExisted) {
         return returnResponse(TOAST.PRODUCT_NOT_FOUND, null, res, 200);
       }
       const response = await getReviewsByProductId(skip, limit, id);
-      console.log('response: ', response)
+      console.log("response: ", response);
       if (response) {
         const totalPages = Math.ceil(response.totalReviews / limit);
         return returnResponseQuery(
@@ -42,7 +88,7 @@ class reivewController {
         );
       }
     } catch (error) {
-      console.log('err: ', error)
+      console.log("err: ", error);
       return returnResponse(ERROR.INTERNAL_SERVER_ERROR, error, res, 500);
     }
   };
