@@ -29,7 +29,7 @@ router
     validateResetPassword,
     validate,
     isUser,
-    usersController.resetPassword
+    usersController.resetPassword,
   );
 router
   .route("/update-password-google-account")
@@ -37,7 +37,7 @@ router
     validateUpdatePasswordForGoogleAccount,
     validate,
     isUser,
-    usersController.updatePasswordForGoogleAccount
+    usersController.updatePasswordForGoogleAccount,
   );
-  
+
 module.exports = router;
