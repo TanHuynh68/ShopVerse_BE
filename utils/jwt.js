@@ -5,6 +5,7 @@ const { ROLE } = require("../constants/role");
 const {getAllUserData } = require("../src/users/users.services");
 
 const createToken = (data) => {
+  console.log(data)
   const token = jwt.sign(
     {
       data: {
@@ -12,7 +13,10 @@ const createToken = (data) => {
         role: data.role,
         name: data.name,
         account_id: data._id,
-        isPasswordExisted: data.isPasswordExisted
+        isPasswordExisted: data.isPasswordExisted,
+        isActive: data.isActive,
+        isDeleted: data.isDeleted,
+        phone: data.phone,
       },
     },
     ENV.SECRET,

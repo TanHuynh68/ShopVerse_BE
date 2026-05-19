@@ -187,6 +187,7 @@ class authController {
   login = async (req, res) => {
     try {
       const { email, password } = req.body;
+      console.log('email: ', email)
       const user = await checkEmailExisted(email);
       if (!user) {
         return returnResponse(TOAST.USER_NOT_FOUND, null, res, 404);

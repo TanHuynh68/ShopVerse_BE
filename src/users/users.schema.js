@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ROLE } = require("../../constants/role");
 
 const { Schema } = mongoose;
 
@@ -9,7 +10,11 @@ const userSchema = new Schema(
     password: { type: String },
     isActive: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
-    role: { type: String, enum: ["USER", "ADMIN"], default: "USER" },
+    role: {
+      type: [String],
+      enum: [ROLE.CUSTOMER, ROLE.SHOP, ROLE.ADMIN],
+      default: [ROLE.CUSTOMER],
+    },
     verifyCode: { type: String, default: null },
     verifyCodeExpiresAt: { type: Date, default: null },
     avatar: { type: String },
@@ -24,7 +29,7 @@ const userSchema = new Schema(
     // when register = google, user will not have passwword, use this field to show for fe
     isPasswordExisted: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 var User = mongoose.model("user", userSchema);

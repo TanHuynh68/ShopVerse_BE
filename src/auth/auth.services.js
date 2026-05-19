@@ -43,6 +43,7 @@ class authService {
   checkEmailExisted = async (email) => {
     const data = await User.findOne({ email });
     if (data) {
+      console.log(data)
       return data;
     }
     return null;
