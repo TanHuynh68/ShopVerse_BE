@@ -15,7 +15,6 @@ exports.loginLimiter = rateLimit({
 
 exports.validateCreateUser = [
   body("name").trim().notEmpty().withMessage("Name is required"),
-
   body("password").trim().notEmpty().withMessage("Password is required"),
   // .isLength({ min: 6 })
   // .withMessage("Password must be at least 6 characters"),
